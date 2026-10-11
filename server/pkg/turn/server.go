@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/connected-framework/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
 	"github.com/pion/turn/v3"
 )
 

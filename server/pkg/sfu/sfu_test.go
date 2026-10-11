@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
 	"github.com/pion/webrtc/v4"
 )
 

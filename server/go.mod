@@ -1,4 +1,4 @@
-module github.com/connected-framework/connected/server
+module github.com/IsmaCortGtz/connected/server
 
 go 1.25.0
 

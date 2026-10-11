@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/permissions"
-	"github.com/connected-framework/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
 )
 
 // Sender abstracts the signaling channel (WebSocket) to deliver messages to a client.

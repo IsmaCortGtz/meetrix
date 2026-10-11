@@ -31,13 +31,13 @@ import (
     "os/signal"
     "syscall"
 
-    "github.com/connected-framework/connected/server/pkg/auth"
-    "github.com/connected-framework/connected/server/pkg/config"
-    "github.com/connected-framework/connected/server/pkg/permissions"
-    "github.com/connected-framework/connected/server/pkg/room"
-    "github.com/connected-framework/connected/server/pkg/sfu"
-    "github.com/connected-framework/connected/server/pkg/signaling"
-    "github.com/connected-framework/connected/server/pkg/turn"
+    "github.com/IsmaCortGtz/connected/server/pkg/auth"
+    "github.com/IsmaCortGtz/connected/server/pkg/config"
+    "github.com/IsmaCortGtz/connected/server/pkg/permissions"
+    "github.com/IsmaCortGtz/connected/server/pkg/room"
+    "github.com/IsmaCortGtz/connected/server/pkg/sfu"
+    "github.com/IsmaCortGtz/connected/server/pkg/signaling"
+    "github.com/IsmaCortGtz/connected/server/pkg/turn"
 )
 
 // CustomAuthenticator implements auth.Authenticator using custom business logic

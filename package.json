@@ -24,7 +24,15 @@
     "pion",
     "typescript"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Ismael Cortés <https://github.com/IsmaCortGtz>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IsmaCortGtz/connected.git"
+  },
+  "homepage": "https://github.com/IsmaCortGtz/connected#readme",
+  "bugs": {
+    "url": "https://github.com/IsmaCortGtz/connected/issues"
+  }
 }
 

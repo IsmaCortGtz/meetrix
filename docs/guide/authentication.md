@@ -425,8 +425,8 @@ import (
     "database/sql"
     "fmt"
 
-    "github.com/connected-framework/connected/server/pkg/auth"
-    "github.com/connected-framework/connected/server/pkg/permissions"
+    "github.com/IsmaCortGtz/connected/server/pkg/auth"
+    "github.com/IsmaCortGtz/connected/server/pkg/permissions"
 )
 
 type DatabaseAuthenticator struct {

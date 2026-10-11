@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/config"
-	"github.com/connected-framework/connected/server/pkg/permissions"
-	"github.com/connected-framework/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
 	"github.com/pion/webrtc/v4"
 )
 

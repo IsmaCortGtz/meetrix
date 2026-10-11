@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/connected-framework/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
 	pionturn "github.com/pion/turn/v3"
 )
 

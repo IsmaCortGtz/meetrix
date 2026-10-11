@@ -91,6 +91,9 @@
   - **URL Parameter Direct Routing**: Opening `?room=xxx-yyyy-zzz` automatically routes directly to the Green Room preview for that room without exposing the user to the landing page.
   - **In-Call Copy Link Pill**: Added a one-click "Copy link" button in the active call header that copies the shareable meeting link to the clipboard and triggers toast notifications.
   - **Google Material Symbols Integration**: Replaced all emojis in buttons, banners, tiles, pills, and modals with official Google Material Symbols icons (`mic`, `videocam`, `video_call`, `present_to_all`, `pan_tool`, `call_end`, etc.), preserving emojis exclusively for in-call reactions.
+- [x] Standardized Go module path and repository links to `github.com/IsmaCortGtz/connected` across all Go packages, `go.mod`, package.json files, examples, and VitePress documentation
+- [x] Added SVG brand logo to `docs/public/logo.svg` and hero headers
+- [x] Created root `README.md` and MIT `LICENSE` with architecture diagrams, quickstart guides, Go library embedding instructions, and NPM distribution guidelines
 - [x] Comprehensive QA verification passed with 100% green tests across Go server, TS SDK, and VitePress docs
 
 ---

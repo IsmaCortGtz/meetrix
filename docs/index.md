@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: API Reference
       link: /api/client-core-sdk
+  image:
+    src: /logo.svg
+    alt: Connected Logo
 
 features:
   - icon: ⚡
@@ -96,7 +99,7 @@ npm install @connected/core
 ```
 
 ```bash [Go Server Core]
-git clone https://github.com/connected-framework/connected.git
+git clone https://github.com/IsmaCortGtz/connected.git
 cd connected/server
 go build -o connected-server ./cmd/server
 ./connected-server -config config.json

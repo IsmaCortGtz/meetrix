@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/connected-framework/connected/server/pkg/config"
-	"github.com/connected-framework/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
 )
 
 // AuthRequest contains client authentication credentials and room targeting information.

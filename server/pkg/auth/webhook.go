@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/config"
-	"github.com/connected-framework/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
 )
 
 // WebhookAuthenticator delegates authentication to a custom HTTP endpoint.

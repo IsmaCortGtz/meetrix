@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/permissions"
-	"github.com/connected-framework/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
 	"github.com/pion/webrtc/v4"
 )
 

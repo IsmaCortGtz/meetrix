@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
@@ -15,7 +16,7 @@ export default defineConfig({
 
   themeConfig: {
     siteTitle: 'Connected',
-    logo: undefined,
+    logo: '/logo.svg',
 
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
@@ -24,8 +25,8 @@ export default defineConfig({
       {
         text: 'v0.1.0',
         items: [
-          { text: 'Changelog', link: 'https://github.com/connected-framework/connected/releases' },
-          { text: 'Roadmap', link: 'https://github.com/connected-framework/connected/blob/main/ROADMAP.md' },
+          { text: 'Changelog', link: 'https://github.com/IsmaCortGtz/connected/releases' },
+          { text: 'Roadmap', link: 'https://github.com/IsmaCortGtz/connected/blob/main/ROADMAP.md' },
         ],
       },
     ],
@@ -70,7 +71,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/connected-framework/connected' },
+      { icon: 'github', link: 'https://github.com/IsmaCortGtz/connected' },
     ],
 
     footer: {

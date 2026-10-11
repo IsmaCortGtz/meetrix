@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/connected-framework/connected/server/pkg/config"
-	"github.com/connected-framework/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
 )
 
 // ExecAuthenticator delegates authentication to an external CLI process via stdin/stdout.

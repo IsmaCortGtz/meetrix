@@ -18,7 +18,7 @@ Before starting, ensure you have the following installed on your machine:
 Clone the repository and install repository dependencies:
 
 ```bash
-git clone https://github.com/connected-framework/connected.git
+git clone https://github.com/IsmaCortGtz/connected.git
 cd connected
 npm install
 ```
