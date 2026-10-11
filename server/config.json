@@ -1,0 +1,48 @@
+{
+  "server": {
+    "http_port": 8080,
+    "webrtc_port_min": 50000,
+    "webrtc_port_max": 50200,
+    "public_ip": "auto",
+    "turn": {
+      "enabled": true,
+      "realm": "connected",
+      "port": 3478,
+      "users": {
+        "connected": "connected-secret"
+      },
+      "secret": "turn-shared-secret"
+    }
+  },
+  "room": {
+    "default_max_participants": 50,
+    "default_session_timeout_sec": 3600,
+    "empty_room_ttl_sec": 60,
+    "default_policies": {
+      "allow_camera": true,
+      "allow_mic": true,
+      "allow_screen_share": true,
+      "allow_chat": true,
+      "allow_reactions": true,
+      "require_lobby": false
+    }
+  },
+  "auth": {
+    "provider": "allow_all",
+    "webhook": {
+      "url": "http://localhost:3000/auth",
+      "timeout_ms": 5000,
+      "secret": ""
+    },
+    "exec": {
+      "command": "",
+      "args": [],
+      "timeout_ms": 5000
+    },
+    "jwt": {
+      "secret": "connected-jwt-secret",
+      "algorithm": "HS256",
+      "public_key": ""
+    }
+  }
+}

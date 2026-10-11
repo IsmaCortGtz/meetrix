@@ -1,0 +1,30 @@
+{
+  "name": "connected-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Extensible WebRTC video conferencing framework with Go SFU and TypeScript client SDK",
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "docs"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:core": "npm run build --workspace=@connected/core",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "docs:dev": "npm run docs:dev --workspace=docs",
+    "docs:build": "npm run docs:build --workspace=docs"
+  },
+  "keywords": [
+    "webrtc",
+    "sfu",
+    "videoconferencing",
+    "golang",
+    "pion",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+

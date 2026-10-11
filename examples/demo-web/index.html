@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connected - Video Conferencing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="insecure-context-banner" class="context-banner hidden">
+      <span class="material-symbols-outlined banner-icon">warning</span>
+      <span>Insecure Context: Accessing via HTTP on LAN (mobile) disables camera/microphone in mobile browsers. Use localhost or configure HTTPS.</span>
+    </div>
+    <div id="app">
+      <!-- 1. HOME SCREEN (Google Meet Landing) -->
+      <section id="home-screen" class="view active">
+        <div class="home-container">
+          <header class="home-header">
+            <div class="brand-logo">
+              <span class="material-symbols-outlined logo-icon">video_chat</span>
+              <span class="logo-text">Connected</span>
+            </div>
+            <div class="home-header-right">
+              <div id="home-clock" class="home-clock">10:45 AM • Wed, Oct 10</div>
+            </div>
+          </header>
+
+          <main class="home-main">
+            <!-- Left Hero Content -->
+            <div class="home-hero">
+              <h1 class="hero-title">Video calls and meetings for everyone</h1>
+              <p class="hero-subtitle">
+                Connect, collaborate, and celebrate from anywhere with ultra-low latency WebRTC powered by Pion SFU.
+              </p>
+
+              <div class="home-actions">
+                <div class="new-meeting-wrapper">
+                  <button id="btn-new-meeting" class="btn btn-primary btn-lg">
+                    <span class="material-symbols-outlined icon">video_call</span>
+                    <span>New meeting</span>
+                  </button>
+                  <div id="new-meeting-menu" class="dropdown-menu hidden">
+                    <button id="btn-create-for-later" class="dropdown-item">
+                      <span class="material-symbols-outlined icon">link</span>
+                      <span>Create a meeting for later</span>
+                    </button>
+                    <button id="btn-start-instant" class="dropdown-item">
+                      <span class="material-symbols-outlined icon">add</span>
+                      <span>Start an instant meeting</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="join-input-group">
+                  <div class="input-with-icon">
+                    <span class="material-symbols-outlined input-icon">keyboard</span>
+                    <input
+                      type="text"
+                      id="home-code-input"
+                      placeholder="Enter a code or link"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <button id="btn-home-join" class="btn btn-text" disabled>
+                    Join
+                  </button>
+                </div>
+              </div>
+
+              <div class="home-divider"></div>
+              <p class="home-learn-more">
+                <a href="https://github.com" target="_blank" rel="noopener">Learn more</a> about Connected open-source SFU
+              </p>
+            </div>
+
+            <!-- Right Visual Graphic / Carousel -->
+            <div class="home-visual">
+              <div class="visual-card">
+                <div class="visual-illustration">
+                  <div class="visual-bubble b1"><span class="material-symbols-outlined">videocam</span></div>
+                  <div class="visual-bubble b2"><span class="material-symbols-outlined">mic</span></div>
+                  <div class="visual-bubble b3"><span class="material-symbols-outlined">bolt</span></div>
+                  <div class="visual-avatar-group">
+                    <span class="mini-avatar av1"><span class="material-symbols-outlined">person</span></span>
+                    <span class="mini-avatar av2"><span class="material-symbols-outlined">face</span></span>
+                    <span class="mini-avatar av3"><span class="material-symbols-outlined">account_circle</span></span>
+                  </div>
+                </div>
+                <h3>Get a link you can share</h3>
+                <p>
+                  Click <strong>New meeting</strong> to get a link you can send to people you want to meet with.
+                </p>
+              </div>
+            </div>
+          </main>
+        </div>
+      </section>
+
+      <!-- 2. GREEN ROOM / PREVIEW SCREEN (Google Meet Pre-join) -->
+      <section id="preview-screen" class="view">
+        <div class="preview-container">
+          <header class="preview-header">
+            <div class="brand-logo">
+              <span class="material-symbols-outlined logo-icon">video_chat</span>
+              <span class="logo-text">Connected</span>
+            </div>
+            <div class="preview-room-pill">
+              <span class="pill-label">Room:</span>
+              <span id="preview-room-id-text" class="pill-code">abc-defg-hij</span>
+              <button id="btn-preview-copy-link" class="icon-btn-sm" title="Copy meeting link">
+                <span class="material-symbols-outlined icon">content_copy</span>
+              </button>
+            </div>
+          </header>
+
+          <main class="preview-main">
+            <!-- Left: Video & Media Controls -->
+            <div class="preview-media-col">
+              <div class="video-preview-wrapper">
+                <video id="preview-video" autoplay playsinline muted></video>
+                <div id="preview-avatar" class="avatar-placeholder">?</div>
+                <div class="preview-controls-overlay">
+                  <button id="preview-mic-btn" class="icon-btn active" title="Toggle Microphone">
+                    <span class="material-symbols-outlined icon">mic</span>
+                  </button>
+                  <button id="preview-cam-btn" class="icon-btn active" title="Toggle Camera">
+                    <span class="material-symbols-outlined icon">videocam</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Device Selectors -->
+              <div class="preview-devices-bar">
+                <div class="device-select-item">
+                  <label for="preview-mic-select"><span class="material-symbols-outlined select-icon">mic</span> Mic</label>
+                  <select id="preview-mic-select">
+                    <option value="">Default Microphone</option>
+                  </select>
+                </div>
+                <div class="device-select-item">
+                  <label for="preview-cam-select"><span class="material-symbols-outlined select-icon">videocam</span> Camera</label>
+                  <select id="preview-cam-select">
+                    <option value="">Default Camera</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Identity & Join Action -->
+            <div class="preview-info-col">
+              <div class="ready-to-join">
+                <h2>Ready to join?</h2>
+                <p class="ready-subtext">No one else is here yet (or participants waiting)</p>
+              </div>
+
+              <div class="preview-form-box">
+                <div class="form-group">
+                  <label for="display-name">Your Display Name</label>
+                  <input
+                    type="text"
+                    id="display-name"
+                    value="Alex Rivers"
+                    placeholder="e.g. Alex Rivers"
+                    required
+                  />
+                </div>
+
+                <!-- Collapsible Advanced Settings -->
+                <details class="advanced-details">
+                  <summary class="advanced-summary"><span class="material-symbols-outlined summary-icon">settings</span> Advanced Connection Settings</summary>
+                  <div class="advanced-content">
+                    <div class="form-group">
+                      <label for="server-url">Signaling Server URL</label>
+                      <input
+                        type="text"
+                        id="server-url"
+                        value="ws://localhost:8080/ws"
+                        placeholder="ws://localhost:8080/ws"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group flex-1">
+                        <label for="role-select">Role</label>
+                        <select id="role-select">
+                          <option value="host">Host</option>
+                          <option value="co-host">Co-Host</option>
+                          <option value="participant" selected>Participant</option>
+                          <option value="viewer">Viewer</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group flex-1">
+                        <label for="auth-token">Auth Token (Optional)</label>
+                        <input
+                          type="text"
+                          id="auth-token"
+                          placeholder="e.g. host-secret"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="form-group checkbox-row">
+                      <input type="checkbox" id="disable-aec-checkbox" />
+                      <label for="disable-aec-checkbox">
+                        Disable Echo Cancellation (same-PC loopback test)
+                      </label>
+                    </div>
+                  </div>
+                </details>
+
+                <div class="preview-actions">
+                  <button id="btn-join-now" class="btn btn-primary btn-lg btn-block">
+                    Join now
+                  </button>
+                  <button id="btn-preview-back-home" class="btn btn-secondary btn-block">
+                    Back to home
+                  </button>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </section>
+
+      <!-- 3. LOBBY WAITING SCREEN -->
+      <section id="lobby-screen" class="view">
+        <div class="lobby-card">
+          <div class="spinner"></div>
+          <h2>Waiting to be admitted...</h2>
+          <p id="lobby-message">The meeting host will let you in shortly.</p>
+          <button id="cancel-lobby-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </section>
+
+      <!-- 3. ACTIVE MEETING SCREEN -->
+      <section id="meeting-screen" class="view">
+        <div id="remote-audio-container" style="display:none"></div>
+        <!-- Top App Bar -->
+        <header class="meeting-header">
+          <div class="header-left">
+            <span class="room-tag" id="header-room-id">engineering-daily</span>
+            <button id="btn-header-copy-link" class="header-copy-pill" title="Copy meeting link">
+              <span class="material-symbols-outlined icon">content_copy</span>
+              <span>Copy link</span>
+            </button>
+            <span class="badge badge-connected" id="connection-status">Connected</span>
+          </div>
+
+          <div class="header-center">
+            <div id="session-timer" class="session-timer">
+              <span class="material-symbols-outlined timer-icon">schedule</span>
+              <span id="timer-text">--:--</span>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="current-user-info">
+              <span id="header-user-name">Alex Rivers</span>
+              <span id="header-user-role" class="role-badge role-host">Host</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="meeting-main">
+          <!-- Video Conference Grid -->
+          <div id="video-grid" class="video-grid">
+            <!-- Tiles rendered dynamically -->
+          </div>
+
+          <!-- Floating Emojis Overlay -->
+          <div id="reaction-container" class="reaction-container"></div>
+
+          <!-- Right Sidebar (Chat & Moderation) -->
+          <aside id="sidebar" class="sidebar">
+            <div class="sidebar-tabs">
+              <button id="tab-chat-btn" class="tab-btn active">
+                Chat <span id="chat-unread-badge" class="unread-pill hidden">0</span>
+              </button>
+              <button id="tab-people-btn" class="tab-btn">
+                People (<span id="people-count">1</span>)
+              </button>
+              <button id="tab-controls-btn" class="tab-btn">Host Controls</button>
+              <button id="sidebar-close-btn" class="close-btn" title="Close Panel"><span class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <!-- Chat Tab Content -->
+            <div id="tab-chat" class="tab-content active">
+              <div id="chat-messages" class="chat-messages">
+                <div class="chat-welcome">
+                  Messages are sent to everyone in the room.
+                </div>
+              </div>
+              <form id="chat-form" class="chat-input-bar">
+                <input
+                  type="text"
+                  id="chat-input"
+                  placeholder="Send a message..."
+                  autocomplete="off"
+                />
+                <button type="submit" class="btn btn-send" title="Send message"><span class="material-symbols-outlined">send</span></button>
+              </form>
+            </div>
+
+            <!-- People Tab Content -->
+            <div id="tab-people" class="tab-content">
+              <!-- Lobby Waiting Queue (Host/CoHost only) -->
+              <div id="lobby-queue-section" class="panel-section hidden">
+                <h4 class="section-title">Waiting in Lobby (<span id="lobby-count">0</span>)</h4>
+                <div id="lobby-list" class="participant-list"></div>
+              </div>
+
+              <!-- In-Call Participants -->
+              <div class="panel-section">
+                <h4 class="section-title">In Call</h4>
+                <div id="people-list" class="participant-list"></div>
+              </div>
+            </div>
+
+            <!-- Host Controls / Room Policies Tab Content -->
+            <div id="tab-controls" class="tab-content">
+              <div class="panel-section">
+                <div class="settings-section">
+                  <h4 class="section-title">Media Devices</h4>
+                  <div class="form-group">
+                    <label for="meeting-mic-select">Microphone</label>
+                    <select id="meeting-mic-select" class="device-select"></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="meeting-cam-select">Camera</label>
+                    <select id="meeting-cam-select" class="device-select"></select>
+                  </div>
+                  <div class="form-group" id="speaker-group">
+                    <label for="meeting-speaker-select">Audio Output (Speaker)</label>
+                    <select id="meeting-speaker-select" class="device-select"></select>
+                  </div>
+                </div>
+
+                <h4 class="section-title">Room Policies</h4>
+                <p class="section-desc">Manage features available to participants</p>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Allow Microphone</span>
+                    <span class="policy-desc">Let participants unmute their audio</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-mic" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Allow Camera</span>
+                    <span class="policy-desc">Let participants turn on video</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-camera" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Allow Screen Share</span>
+                    <span class="policy-desc">Let participants share their screen</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-screen" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Allow Chat</span>
+                    <span class="policy-desc">Let participants send messages</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-chat" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Allow Reactions</span>
+                    <span class="policy-desc">Let participants send emojis</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-reactions" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="policy-item">
+                  <div class="policy-info">
+                    <span class="policy-label">Require Lobby</span>
+                    <span class="policy-desc">Guests wait until admitted</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="policy-lobby" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </main>
+
+        <!-- Bottom Control Bar -->
+        <footer class="meeting-footer">
+          <div class="controls-bar">
+            <!-- Mic Button -->
+            <button id="btn-toggle-mic" class="control-btn" title="Toggle Microphone">
+              <span class="material-symbols-outlined icon">mic</span>
+            </button>
+
+            <!-- Camera Button -->
+            <button id="btn-toggle-cam" class="control-btn" title="Toggle Camera">
+              <span class="material-symbols-outlined icon">videocam</span>
+            </button>
+
+            <!-- Screen Share Button -->
+            <button id="btn-toggle-screen" class="control-btn" title="Share Screen">
+              <span class="material-symbols-outlined icon">present_to_all</span>
+            </button>
+
+            <!-- Hand Raise Button -->
+            <button id="btn-raise-hand" class="control-btn" title="Raise Hand">
+              <span class="material-symbols-outlined icon">pan_tool</span>
+            </button>
+
+            <!-- Reactions Popover Trigger -->
+            <div class="reaction-popover-wrapper">
+              <button id="btn-reaction-picker" class="control-btn" title="Send Reaction">
+                <span class="material-symbols-outlined icon">mood</span>
+              </button>
+              <div id="reaction-picker-menu" class="reaction-menu hidden">
+                <button class="emoji-btn" data-emoji="💖">💖</button>
+                <button class="emoji-btn" data-emoji="👍">👍</button>
+                <button class="emoji-btn" data-emoji="🎉">🎉</button>
+                <button class="emoji-btn" data-emoji="👏">👏</button>
+                <button class="emoji-btn" data-emoji="😂">😂</button>
+                <button class="emoji-btn" data-emoji="😮">😮</button>
+              </div>
+            </div>
+
+            <div class="control-separator"></div>
+
+            <!-- Chat Sidebar Toggle -->
+            <button id="btn-toggle-chat" class="control-btn" title="Chat">
+              <span class="material-symbols-outlined icon">chat</span>
+            </button>
+
+            <!-- People Sidebar Toggle -->
+            <button id="btn-toggle-people" class="control-btn" title="People & Controls">
+              <span class="material-symbols-outlined icon">group</span>
+            </button>
+
+            <div class="control-separator"></div>
+
+            <!-- Leave Call Button -->
+            <button id="btn-leave-call" class="control-btn btn-danger" title="Leave Call">
+              <span class="material-symbols-outlined icon">call_end</span>
+            </button>
+          </div>
+        </footer>
+      </section>
+
+      <!-- 5. LEFT MEETING SCREEN (Google Meet post-call screen) -->
+      <section id="left-meeting-screen" class="view">
+        <div class="left-container">
+          <div class="left-card">
+            <div class="brand-logo" style="margin-bottom: 24px;">
+              <span class="material-symbols-outlined logo-icon">video_chat</span>
+              <span class="logo-text">Connected</span>
+            </div>
+            <h2>You left the meeting</h2>
+            <p class="left-subtext">Have a great day! You can rejoin or start a new call anytime.</p>
+            <div class="left-actions">
+              <button id="btn-rejoin" class="btn btn-primary btn-lg">Rejoin</button>
+              <button id="btn-return-home" class="btn btn-secondary btn-lg">Return to home screen</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Meeting Created Modal (for "Create for later") -->
+    <div id="meeting-created-modal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Here's the link to your meeting</h3>
+          <button id="modal-close-btn" class="modal-close-btn" title="Close"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <p class="modal-desc">
+          Copy this link and send it to people you want to meet with. Be sure to save it so you can use it later, too.
+        </p>
+        <div class="link-copy-box">
+          <input type="text" id="modal-link-input" readonly />
+          <button id="btn-modal-copy-link" class="btn btn-primary" title="Copy link">
+            <span class="material-symbols-outlined icon">content_copy</span>
+            <span>Copy</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Audio Autoplay Blocked Banner -->
+    <div id="audio-unlock-banner" class="audio-banner hidden">
+      <span class="material-symbols-outlined banner-icon">volume_off</span>
+      <span>Audio playback was paused by browser policy.</span>
+      <button id="btn-unlock-audio" class="btn btn-sm btn-primary">Enable Audio</button>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

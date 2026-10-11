@@ -1,0 +1,39 @@
+{
+  "name": "@connected/core",
+  "version": "0.1.0",
+  "description": "Universal WebRTC client SDK for Connected video conferencing",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsup": "^8.2.4",
+    "vitest": "^2.0.5"
+  },
+  "keywords": [
+    "webrtc",
+    "sfu",
+    "videoconferencing",
+    "connected"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
