@@ -1,6 +1,6 @@
 # Custom Go Media Server Example
 
-This example demonstrates how an external Go developer can import the modular packages of the **Connected** WebRTC SFU framework to build a fully customized media server with proprietary authentication, room policies, and custom HTTP endpoints.
+This example demonstrates how an external Go developer can import the modular packages of the **Meetrix** WebRTC SFU framework to build a fully customized media server with proprietary authentication, room policies, and custom HTTP endpoints.
 
 ---
 
@@ -83,7 +83,7 @@ curl -X POST http://localhost:8090/api/tokens \
 
 ## Connecting Clients
 
-Connect using any WebSocket WebRTC client or the `@connected/core` TypeScript SDK to `ws://localhost:8090/ws`:
+Connect using any WebSocket WebRTC client or the `@meetrix/core` TypeScript SDK to `ws://localhost:8090/ws`:
 
 ```json
 {

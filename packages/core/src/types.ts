@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Type Definitions
+ * Meetrix WebRTC Core SDK - Type Definitions
  * Complete TypeScript interfaces matching the Go SFU signaling protocol and browser media models.
  */
 

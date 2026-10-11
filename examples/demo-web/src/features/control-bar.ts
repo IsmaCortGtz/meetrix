@@ -1,9 +1,9 @@
 /**
- * Connected WebRTC Demo - Control Bar Actions
+ * Meetrix WebRTC Demo - Control Bar Actions
  * Bottom control buttons: mic, camera, screen share, raise hand, reaction picker, and leave call.
  */
 
-import type { RemotePeer } from '@connected/core';
+import type { RemotePeer } from '@meetrix/core';
 import { state } from '../state';
 import {
   btnToggleMic,

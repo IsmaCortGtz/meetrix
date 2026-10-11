@@ -1,7 +1,7 @@
 {
-  "name": "@connected/core",
+  "name": "@meetrix/core",
   "version": "0.1.0",
-  "description": "Universal WebRTC client SDK for Connected video conferencing",
+  "description": "Universal WebRTC client SDK for Meetrix video conferencing",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -31,18 +31,18 @@
     "webrtc",
     "sfu",
     "videoconferencing",
-    "connected"
+    "meetrix"
   ],
   "author": "Ismael Cortés <https://github.com/IsmaCortGtz>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IsmaCortGtz/connected.git",
+    "url": "git+https://github.com/IsmaCortGtz/meetrix.git",
     "directory": "packages/core"
   },
-  "homepage": "https://github.com/IsmaCortGtz/connected#readme",
+  "homepage": "https://github.com/IsmaCortGtz/meetrix#readme",
   "bugs": {
-    "url": "https://github.com/IsmaCortGtz/connected/issues"
+    "url": "https://github.com/IsmaCortGtz/meetrix/issues"
   }
 }
 

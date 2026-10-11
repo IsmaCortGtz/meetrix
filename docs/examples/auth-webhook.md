@@ -1,6 +1,6 @@
 # Auth Webhook Service (Node.js)
 
-The **Auth Webhook** example demonstrates how to integrate Connected with an existing Node.js / Express backend service using HTTP Webhook authentication.
+The **Auth Webhook** example demonstrates how to integrate Meetrix with an existing Node.js / Express backend service using HTTP Webhook authentication.
 
 ---
 
@@ -11,8 +11,8 @@ Whenever a client attempts to connect to the Go SFU server via WebSocket with a 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Client as User (@connected/core)
-    participant SFU as Connected Go SFU
+    actor Client as User (@meetrix/core)
+    participant SFU as Meetrix Go SFU
     participant AuthWebhook as Auth Webhook (Node.js)
     participant Database as User Database
 
@@ -43,7 +43,7 @@ npm start
 
 By default, the webhook server runs at `http://localhost:3000/auth`.
 
-### 3. Configure Connected Server
+### 3. Configure Meetrix Server
 
 Update `server/config.json` to use the webhook provider:
 
@@ -63,8 +63,8 @@ Update `server/config.json` to use the webhook provider:
 Or run the Go server with environment variables:
 
 ```bash
-CONNECTED_AUTH_PROVIDER=webhook \
-CONNECTED_AUTH_WEBHOOK_URL=http://localhost:3000/auth \
+MEETRIX_AUTH_PROVIDER=webhook \
+MEETRIX_AUTH_WEBHOOK_URL=http://localhost:3000/auth \
 go run ./cmd/server -config config.json
 ```
 

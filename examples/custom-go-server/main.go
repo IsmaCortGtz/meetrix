@@ -12,13 +12,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/auth"
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
-	"github.com/IsmaCortGtz/connected/server/pkg/signaling"
-	"github.com/IsmaCortGtz/connected/server/pkg/turn"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/signaling"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/turn"
 )
 
 // UserRecord represents user data stored in the developer's database or cache.
@@ -108,7 +108,7 @@ func (a *DatabaseTokenAuthenticator) Authenticate(ctx context.Context, req auth.
 }
 
 func main() {
-	log.Println("[CustomServer] Initializing custom Connected Go Media Server...")
+	log.Println("[CustomServer] Initializing custom Meetrix Go Media Server...")
 
 	// 1. Configure media server settings
 	serverCfg := config.ServerConfig{
@@ -118,7 +118,7 @@ func main() {
 		PublicIP:      "127.0.0.1",
 		TURN: config.TURNConfig{
 			Enabled: true,
-			Realm:   "custom-connected",
+			Realm:   "custom-meetrix",
 			Port:    3479,
 			Users: map[string]string{
 				"custom-user": "custom-pass",

@@ -5,7 +5,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
 	"github.com/pion/interceptor"
 	"github.com/pion/webrtc/v4"
 )

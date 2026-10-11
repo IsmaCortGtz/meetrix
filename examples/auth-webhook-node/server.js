@@ -1,5 +1,5 @@
 /**
- * Connected Framework - Authentication Webhook Server (Node.js Reference)
+ * Meetrix Framework - Authentication Webhook Server (Node.js Reference)
  *
  * Demonstrates how an external backend validates meeting join requests from the Go SFU.
  * The Go server invokes this webhook endpoint via HTTP POST whenever a client attempts to join.
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'connected-auth-webhook' });
+  res.json({ status: 'ok', service: 'meetrix-auth-webhook' });
 });
 
 /**
@@ -33,7 +33,7 @@ app.get('/health', (req, res) => {
  */
 app.post('/auth/webhook', (req, res) => {
   const authHeader = req.headers['authorization'];
-  const signatureHeader = req.headers['x-connected-signature'];
+  const signatureHeader = req.headers['x-meetrix-signature'];
 
   // 1. Verify shared secret between Go SFU and Webhook server
   if (WEBHOOK_SECRET) {
@@ -116,7 +116,7 @@ app.post('/auth/webhook', (req, res) => {
 
 // Start HTTP server
 app.listen(PORT, () => {
-  console.log(`Connected Authentication Webhook Server running at http://localhost:${PORT}`);
+  console.log(`Meetrix Authentication Webhook Server running at http://localhost:${PORT}`);
   console.log(`Webhook endpoint: POST http://localhost:${PORT}/auth/webhook`);
   console.log(`Shared Secret: "${WEBHOOK_SECRET}"`);
 });

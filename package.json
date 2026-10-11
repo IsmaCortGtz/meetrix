@@ -1,5 +1,5 @@
 {
-  "name": "connected-monorepo",
+  "name": "meetrix-monorepo",
   "version": "0.1.0",
   "private": true,
   "description": "Extensible WebRTC video conferencing framework with Go SFU and TypeScript client SDK",
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "build:core": "npm run build --workspace=@connected/core",
+    "build:core": "npm run build --workspace=@meetrix/core",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "docs:dev": "npm run docs:dev --workspace=docs",
@@ -28,11 +28,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IsmaCortGtz/connected.git"
+    "url": "git+https://github.com/IsmaCortGtz/meetrix.git"
   },
-  "homepage": "https://github.com/IsmaCortGtz/connected#readme",
+  "homepage": "https://github.com/IsmaCortGtz/meetrix#readme",
   "bugs": {
-    "url": "https://github.com/IsmaCortGtz/connected/issues"
+    "url": "https://github.com/IsmaCortGtz/meetrix/issues"
   }
 }
 

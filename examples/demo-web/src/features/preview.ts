@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Greenroom / Preview Controls
+ * Meetrix WebRTC Demo - Greenroom / Preview Controls
  * Manages pre-call camera/mic preview, device selection, and media constraints.
  */
 

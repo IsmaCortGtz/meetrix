@@ -6,7 +6,7 @@ Deploying WebRTC media infrastructure in production requires careful handling of
 
 ## Network Architecture & Ports
 
-Connected requires specific ports open on your host or cloud security group:
+Meetrix requires specific ports open on your host or cloud security group:
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ flowchart LR
             Proxy["Reverse Proxy (Nginx / Caddy)<br/>TCP 443 (HTTPS / WSS)"]
         end
 
-        subgraph Connected["Connected Server Daemon"]
+        subgraph Meetrix["Meetrix Server Daemon"]
             Signaling["HTTP & Signaling<br/>TCP 8080"]
             STUN_TURN["Embedded STUN/TURN<br/>UDP 3478"]
             WebRTC["Pion SFU RTP/RTCP<br/>UDP 50000-50200"]
@@ -35,7 +35,7 @@ flowchart LR
 | Port | Protocol | Service | Description |
 | :--- | :---: | :--- | :--- |
 | **`443`** | TCP | Reverse Proxy | HTTPS & secure WebSocket (`wss://`) ingress |
-| **`8080`** | TCP | Connected Server | Internal HTTP and WebSocket signaling listener |
+| **`8080`** | TCP | Meetrix Server | Internal HTTP and WebSocket signaling listener |
 | **`3478`** | UDP | Embedded TURN/STUN | RFC 5766/8656 UDP relay listener for symmetric NATs |
 | **`50000-50200`** | UDP | Pion WebRTC SFU | Ephemeral media ports for RTP audio/video streams |
 
@@ -60,11 +60,11 @@ In `server/config.json`:
 Or via environment variable:
 
 ```bash
-export CONNECTED_PUBLIC_IP="203.0.113.10"
+export MEETRIX_PUBLIC_IP="203.0.113.10"
 ```
 
 > [!IMPORTANT]
-> If `public_ip` is left as `"auto"`, Connected attempts to discover its public IP via STUN during startup. For production deployments with static IPs, **always set an explicit public IP** to avoid lookup latency during startup.
+> If `public_ip` is left as `"auto"`, Meetrix attempts to discover its public IP via STUN during startup. For production deployments with static IPs, **always set an explicit public IP** to avoid lookup latency during startup.
 
 ---
 
@@ -89,7 +89,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags="-w -s" \
-    -o connected-server \
+    -o meetrix-server \
     ./cmd/server
 
 # Stage 2: Hardened runtime
@@ -100,16 +100,16 @@ WORKDIR /app
 RUN apk --no-cache add ca-certificates tzdata
 
 # Create unprivileged user
-RUN adduser -D -u 10001 connecteduser
+RUN adduser -D -u 10001 meetrixuser
 
-COPY --from=builder /build/connected-server /app/connected-server
+COPY --from=builder /build/meetrix-server /app/meetrix-server
 COPY config.json /app/config.json
 
-USER connecteduser
+USER meetrixuser
 
 EXPOSE 8080/tcp 3478/udp 50000-50200/udp
 
-ENTRYPOINT ["/app/connected-server", "-config", "/app/config.json"]
+ENTRYPOINT ["/app/meetrix-server", "-config", "/app/config.json"]
 ```
 
 ---
@@ -124,22 +124,22 @@ Because WebRTC requires high-throughput UDP packet delivery without Docker NAT t
 version: '3.8'
 
 services:
-  connected:
+  meetrix:
     build:
       context: ./server
       dockerfile: Dockerfile
     network_mode: "host"
     restart: unless-stopped
     environment:
-      - CONNECTED_HTTP_PORT=8080
-      - CONNECTED_PUBLIC_IP=203.0.113.10
-      - CONNECTED_WEBRTC_PORT_MIN=50000
-      - CONNECTED_WEBRTC_PORT_MAX=50200
-      - CONNECTED_TURN_ENABLED=true
-      - CONNECTED_TURN_PORT=3478
-      - CONNECTED_TURN_SECRET=change-this-in-production-turn-secret
-      - CONNECTED_AUTH_PROVIDER=jwt
-      - CONNECTED_AUTH_JWT_SECRET=change-this-production-jwt-secret-min-32-bytes
+      - MEETRIX_HTTP_PORT=8080
+      - MEETRIX_PUBLIC_IP=203.0.113.10
+      - MEETRIX_WEBRTC_PORT_MIN=50000
+      - MEETRIX_WEBRTC_PORT_MAX=50200
+      - MEETRIX_TURN_ENABLED=true
+      - MEETRIX_TURN_PORT=3478
+      - MEETRIX_TURN_SECRET=change-this-in-production-turn-secret
+      - MEETRIX_AUTH_PROVIDER=jwt
+      - MEETRIX_AUTH_JWT_SECRET=change-this-production-jwt-secret-min-32-bytes
     volumes:
       - ./server/config.json:/app/config.json:ro
 ```
@@ -152,7 +152,7 @@ If host networking cannot be used (e.g., Docker for Mac/Windows during developme
 version: '3.8'
 
 services:
-  connected:
+  meetrix:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -162,7 +162,7 @@ services:
       - "50000-50200:50000-50200/udp"
     restart: unless-stopped
     environment:
-      - CONNECTED_PUBLIC_IP=127.0.0.1
+      - MEETRIX_PUBLIC_IP=127.0.0.1
 ```
 
 ---
@@ -174,7 +174,7 @@ In production, place an HTTPS reverse proxy in front of the HTTP port (`8080`) t
 ### Nginx Configuration
 
 ```nginx
-# /etc/nginx/sites-available/connected.conf
+# /etc/nginx/sites-available/meetrix.conf
 
 map $http_upgrade $connection_upgrade {
     default upgrade;

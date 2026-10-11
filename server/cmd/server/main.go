@@ -12,12 +12,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/auth"
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
-	"github.com/IsmaCortGtz/connected/server/pkg/signaling"
-	"github.com/IsmaCortGtz/connected/server/pkg/turn"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/signaling"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/turn"
 )
 
 func main() {
@@ -34,12 +34,12 @@ func main() {
 		cfg.Server.HTTPPort = *portFlag
 	}
 
-	log.Printf("[Connected] Initializing Go Media Server on HTTP port %d", cfg.Server.HTTPPort)
+	log.Printf("[Meetrix] Initializing Go Media Server on HTTP port %d", cfg.Server.HTTPPort)
 
 	// Embedded STUN/TURN server
 	var turnServer *turn.Server
 	if cfg.Server.TURN.Enabled {
-		log.Printf("[Connected] Starting embedded STUN/TURN server on UDP :%d (realm: %s)", cfg.Server.TURN.Port, cfg.Server.TURN.Realm)
+		log.Printf("[Meetrix] Starting embedded STUN/TURN server on UDP :%d (realm: %s)", cfg.Server.TURN.Port, cfg.Server.TURN.Realm)
 		ts, err := turn.NewServer(cfg.Server.TURN, cfg.Server.PublicIP, cfg.Server.WebRTCPortMin, cfg.Server.WebRTCPortMax)
 		if err != nil {
 			log.Fatalf("Failed to start TURN server: %v", err)
@@ -48,14 +48,14 @@ func main() {
 	}
 
 	// Pluggable Authenticator
-	log.Printf("[Connected] Initializing authentication provider: %s", cfg.Auth.Provider)
+	log.Printf("[Meetrix] Initializing authentication provider: %s", cfg.Auth.Provider)
 	authProvider, err := auth.NewAuthenticator(&cfg.Auth)
 	if err != nil {
 		log.Fatalf("Failed to initialize authenticator: %v", err)
 	}
 
 	// SFU Media Engine
-	log.Printf("[Connected] Initializing Pion WebRTC SFU (port range: %d-%d)", cfg.Server.WebRTCPortMin, cfg.Server.WebRTCPortMax)
+	log.Printf("[Meetrix] Initializing Pion WebRTC SFU (port range: %d-%d)", cfg.Server.WebRTCPortMin, cfg.Server.WebRTCPortMax)
 	sfuEngine, err := sfu.NewEngine(cfg.Server)
 	if err != nil {
 		log.Fatalf("Failed to initialize SFU engine: %v", err)
@@ -99,7 +99,7 @@ func main() {
 
 	// Start HTTP server in background goroutine
 	go func() {
-		log.Printf("[Connected] Media server ready and listening on %s", serverAddr)
+		log.Printf("[Meetrix] Media server ready and listening on %s", serverAddr)
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("HTTP server error: %v", err)
 		}
@@ -110,7 +110,7 @@ func main() {
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	<-sigChan
 
-	log.Println("[Connected] Shutting down gracefully...")
+	log.Println("[Meetrix] Shutting down gracefully...")
 
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -127,5 +127,5 @@ func main() {
 		}
 	}
 
-	log.Println("[Connected] Server stopped cleanly")
+	log.Println("[Meetrix] Server stopped cleanly")
 }

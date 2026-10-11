@@ -1,5 +1,5 @@
 {
-  "name": "@connected/example-demo-web",
+  "name": "@meetrix/example-demo-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@connected/core": "0.1.0"
+    "@meetrix/core": "0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.5.4",

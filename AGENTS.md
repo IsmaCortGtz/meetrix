@@ -2,9 +2,9 @@
 
 ## 1. Project Overview & Mission
 
-**Connected** is an open-source, developer-friendly WebRTC video conferencing and real-time calling framework composed of:
+**Meetrix** is an open-source, developer-friendly WebRTC video conferencing and real-time calling framework composed of:
 1. **`server/`**: A self-contained, high-performance Go media server featuring an SFU (Selective Forwarding Unit using `pion/webrtc/v4`), embedded STUN/TURN server (`pion/turn/v3`) for zero-config NAT/firewall traversal, WebSocket signaling, pluggable authentication (HTTP webhook, CLI stdin/stdout, native JWT, or native Go interface), and Google Meet-style meeting permissions/moderation.
-2. **`packages/core/`**: A lightweight, universal TypeScript client SDK (`@connected/core`) for browser and JS environments with clean reactive APIs for media, chat, reactions, and moderation.
+2. **`packages/core/`**: A lightweight, universal TypeScript client SDK (`@meetrix/core`) for browser and JS environments with clean reactive APIs for media, chat, reactions, and moderation.
 3. **`docs/`**: A VitePress documentation suite configured for continuous deployment on GitHub Pages.
 4. **`examples/`**: Working interactive demos and reference implementations.
 
@@ -17,7 +17,7 @@
   - Go: Concurrency must be thread-safe (`sync.RWMutex`, goroutines with clean cancellation contexts). Zero data races (`go test -race`).
   - TypeScript: Strict mode (`"strict": true`). No unchecked `any` types. Exported symbols must include full TSDoc annotations.
 - **Dependency Discipline**:
-  - Keep `@connected/core` free of heavy external UI or media dependencies; rely strictly on browser standard WebRTC and WebSocket APIs.
+  - Keep `@meetrix/core` free of heavy external UI or media dependencies; rely strictly on browser standard WebRTC and WebSocket APIs.
   - Keep `server/` self-contained with minimal production dependencies: `pion/webrtc/v4`, `pion/turn/v3`, `gorilla/websocket`, `golang-jwt/jwt/v5`.
 
 ---
@@ -51,7 +51,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **Orchestrator** | `self` / Parent | Manages overall project state, updates `PROJECT_STATUS.md`, dispatches subagents, interacts with the user. |
 | **Backend Engineer** | `backend-engineer` | Go SFU implementation, Pion WebRTC pipelines, embedded TURN server, auth providers, room session timers. |
-| **SDK Engineer** | `sdk-engineer` | TypeScript `@connected/core`, local media capture, WebSocket signaling client, peer track subscriptions. |
+| **SDK Engineer** | `sdk-engineer` | TypeScript `@meetrix/core`, local media capture, WebSocket signaling client, peer track subscriptions. |
 | **Docs Specialist** | `docs-specialist` | VitePress setup, documentation guides, API reference docs, GitHub Pages deployment workflow. |
 | **QA & Verifier** | `qa-verifier` | Independent code review, race condition detection, automated test execution, build checks, and edge-case verification. |
 
@@ -70,10 +70,10 @@ flowchart TD
 cd server && go test -v -race ./...
 
 # Build the standalone server binary
-cd server && go build -o bin/connected-server cmd/server/main.go
+cd server && go build -o bin/meetrix-server cmd/server/main.go
 
 # Run the server
-cd server && ./bin/connected-server -config config.json
+cd server && ./bin/meetrix-server -config config.json
 ```
 
 ### TypeScript Packages (`packages/*`)
@@ -85,7 +85,7 @@ npm install
 npm run build
 
 # Build core package specifically
-npm run build --workspace=@connected/core
+npm run build --workspace=@meetrix/core
 
 # Run type check
 npm run typecheck

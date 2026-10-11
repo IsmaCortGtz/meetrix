@@ -1,6 +1,6 @@
 # Binaries & Go build artifacts
 server/bin/
-server/connected-server
+server/meetrix-server
 *.exe
 *.exe~
 *.dll

@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/IsmaCortGtz/connected">
-    <img src="docs/public/logo.svg" alt="Connected Logo" width="500">
+  <a href="https://github.com/IsmaCortGtz/meetrix">
+    <img src="docs/public/logo.svg" alt="Meetrix Logo" width="500">
   </a>
 </p>
 
@@ -11,11 +11,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/IsmaCortGtz/connected/actions"><img src="https://img.shields.io/badge/CI-Passing-10b981?style=flat-square&logo=github" alt="CI Status"></a>
-  <a href="https://www.npmjs.com/package/@connected/core"><img src="https://img.shields.io/npm/v/@connected/core?color=3b82f6&style=flat-square&logo=npm" alt="NPM Version"></a>
-  <a href="https://pkg.go.dev/github.com/IsmaCortGtz/connected/server"><img src="https://img.shields.io/badge/Go_Pkg-github.com%2FIsmaCortGtz%2Fconnected%2Fserver-007d9c?style=flat-square&logo=go" alt="Go Reference"></a>
-  <a href="https://ismacortgtz.github.io/connected/"><img src="https://img.shields.io/badge/Docs-VitePress-6366f1?style=flat-square" alt="Documentation"></a>
-  <a href="https://github.com/IsmaCortGtz/connected/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-gray?style=flat-square" alt="License"></a>
+  <a href="https://github.com/IsmaCortGtz/meetrix/actions"><img src="https://img.shields.io/badge/CI-Passing-10b981?style=flat-square&logo=github" alt="CI Status"></a>
+  <a href="https://www.npmjs.com/package/@meetrix/core"><img src="https://img.shields.io/npm/v/@meetrix/core?color=3b82f6&style=flat-square&logo=npm" alt="NPM Version"></a>
+  <a href="https://pkg.go.dev/github.com/IsmaCortGtz/meetrix/server"><img src="https://img.shields.io/badge/Go_Pkg-github.com%2FIsmaCortGtz%2Fmeetrix%2Fserver-007d9c?style=flat-square&logo=go" alt="Go Reference"></a>
+  <a href="https://ismacortgtz.github.io/meetrix/"><img src="https://img.shields.io/badge/Docs-VitePress-6366f1?style=flat-square" alt="Documentation"></a>
+  <a href="https://github.com/IsmaCortGtz/meetrix/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-gray?style=flat-square" alt="License"></a>
 </p>
 
 ---
@@ -35,7 +35,7 @@
   - Remote muting, camera locks, and screen sharing locks.
   - Synchronized session countdown timers with auto-expiration.
 - 💻 **Complete Google Meet Flow Included**: Instant meeting IDs (`abc-defg-hij`), pre-join Green Room with camera/mic previews & device selectors, shareable URL routing (`?room=...`), in-call copy link pills, and post-call rejoin screens.
-- 📦 **Universal TypeScript SDK (`@connected/core`)**: Pure browser WebRTC and WebSocket client with dual ESM/CJS bundles, strict typings, typed reactive events, and **zero external UI dependencies**.
+- 📦 **Universal TypeScript SDK (`@meetrix/core`)**: Pure browser WebRTC and WebSocket client with dual ESM/CJS bundles, strict typings, typed reactive events, and **zero external UI dependencies**.
 - 🎙️ **Hardware A/V Lip-Sync & Ultra-Low Latency**: Hardware-synchronized audio/video streams, `playoutDelayHint = 0`, and jitter buffer targets set to 0.
 
 ---
@@ -45,13 +45,13 @@
 ```mermaid
 flowchart TB
     subgraph Clients["Client Applications"]
-        Host["Host (WebRTC + WS)<br/>@connected/core"]
-        User1["Participant 1<br/>@connected/core"]
-        User2["Participant 2 (Cellular NAT)<br/>@connected/core"]
+        Host["Host (WebRTC + WS)<br/>@meetrix/core"]
+        User1["Participant 1<br/>@meetrix/core"]
+        User2["Participant 2 (Cellular NAT)<br/>@meetrix/core"]
         Lobby["Knocking User<br/>(Lobby Queue)"]
     end
 
-    subgraph Server["Connected Go Media Server"]
+    subgraph Server["Meetrix Go Media Server"]
         subgraph Signaling["Signaling Plane (:8080 TCP)"]
             WSHub["WebSocket Hub"]
             Auth["Auth Provider<br/>(Webhook / Exec / JWT / Go)"]
@@ -97,12 +97,12 @@ flowchart TB
 #### Option A: Run Precompiled Binary
 ```bash
 # Clone the repository
-git clone https://github.com/IsmaCortGtz/connected.git
-cd connected/server
+git clone https://github.com/IsmaCortGtz/meetrix.git
+cd meetrix/server
 
 # Build and run the server binary
-go build -o bin/connected-server cmd/server/main.go
-./bin/connected-server -config config.json
+go build -o bin/meetrix-server cmd/server/main.go
+./bin/meetrix-server -config config.json
 ```
 
 #### Option B: Run via Docker Compose
@@ -117,21 +117,21 @@ The server listens on:
 
 ---
 
-### 2. Connect with the TypeScript SDK (`@connected/core`)
+### 2. Connect with the TypeScript SDK (`@meetrix/core`)
 
 Install the client SDK in your web application:
 
 ```bash
-npm install @connected/core
+npm install @meetrix/core
 ```
 
 Initialize a meeting with reactive media, chat, and moderation:
 
 ```typescript
-import { ConnectedRoom } from '@connected/core';
+import { MeetrixRoom } from '@meetrix/core';
 
 // 1. Create a room instance
-const room = new ConnectedRoom({ autoReconnect: true });
+const room = new MeetrixRoom({ autoReconnect: true });
 
 // 2. Listen to room and media events
 room.on('connected', (info) => {
@@ -175,10 +175,10 @@ await room.reactions.sendReaction('👍');
 
 ### 3. Use the Go Server as an Embedded Library
 
-You can embed the Connected media server directly into your existing Go application without running an external service:
+You can embed the Meetrix media server directly into your existing Go application without running an external service:
 
 ```bash
-go get github.com/IsmaCortGtz/connected/server
+go get github.com/IsmaCortGtz/meetrix/server
 ```
 
 ```go
@@ -188,12 +188,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/auth"
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
-	"github.com/IsmaCortGtz/connected/server/pkg/signaling"
-	"github.com/IsmaCortGtz/connected/server/pkg/turn"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/signaling"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/turn"
 )
 
 func main() {
@@ -220,7 +220,7 @@ func main() {
 	hub := signaling.NewHub(roomManager, sfuEngine, authenticator, &cfg.Server, turnServer)
 
 	http.HandleFunc("/ws", hub.HandleWebSocket)
-	log.Println("Connected media server listening on :8080")
+	log.Println("Meetrix media server listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 ```
@@ -232,8 +232,8 @@ func main() {
 > [!NOTE]
 > **What should be published to npm?**
 >
-> - **`@connected/core`** is the **only package** intended for npm distribution. It contains the universal TypeScript client SDK consumed by browser web apps, Electron, or mobile wrappers.
-> - The Go media server is distributed via Go modules (`github.com/IsmaCortGtz/connected/server`), binary releases on GitHub, and Docker container images.
+> - **`@meetrix/core`** is the **only package** intended for npm distribution. It contains the universal TypeScript client SDK consumed by browser web apps, Electron, or mobile wrappers.
+> - The Go media server is distributed via Go modules (`github.com/IsmaCortGtz/meetrix/server`), binary releases on GitHub, and Docker container images.
 > - The example applications (`examples/*`) and documentation (`docs/`) are marked as private workspace packages.
 
 ---
@@ -241,7 +241,7 @@ func main() {
 ## 🗂️ Repository Structure
 
 ```
-connected/
+meetrix/
 ├── server/                     # Go Media Server & SFU Core
 │   ├── cmd/server/             # Standalone server CLI entrypoint
 │   ├── pkg/sfu/                # Pion WebRTC SFU engine & RTP forwarding
@@ -253,8 +253,8 @@ connected/
 │   └── pkg/config/             # JSON configuration parser & env overrides
 │
 ├── packages/
-│   └── core/                   # @connected/core Universal TypeScript SDK
-│       ├── src/room.ts         # Main ConnectedRoom orchestrator
+│   └── core/                   # @meetrix/core Universal TypeScript SDK
+│       ├── src/room.ts         # Main MeetrixRoom orchestrator
 │       ├── src/local-media.ts  # Camera, microphone & screen capture manager
 │       ├── src/webrtc.ts       # RTCPeerConnection wrapper & perfect negotiation
 │       ├── src/signaling.ts    # Resilient WebSocket client with auto-reconnect
@@ -282,10 +282,10 @@ connected/
     "turn": {
       "enabled": true,
       "port": 3478,
-      "realm": "connected.local",
+      "realm": "meetrix.local",
       "static_auth": {
-        "username": "connected",
-        "password": "connected_secret_turn_pass"
+        "username": "meetrix",
+        "password": "meetrix_secret_turn_pass"
       }
     }
   },
@@ -308,7 +308,7 @@ connected/
 }
 ```
 
-Environment variable overrides are supported with the `CONNECTED_` prefix (e.g. `CONNECTED_SERVER_HTTP_PORT=9090`).
+Environment variable overrides are supported with the `MEETRIX_` prefix (e.g. `MEETRIX_SERVER_HTTP_PORT=9090`).
 
 ---
 
@@ -336,5 +336,5 @@ npm run docs:build
 
 This project is open-source software licensed under the **[MIT License](LICENSE)**.
 
-Copyright © 2026 [Ismael Cortés](https://github.com/IsmaCortGtz) & Connected Contributors.
+Copyright © 2026 [Ismael Cortés](https://github.com/IsmaCortGtz) & Meetrix Contributors.
 

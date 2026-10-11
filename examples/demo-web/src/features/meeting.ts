@@ -1,9 +1,9 @@
 /**
- * Connected WebRTC Demo - Meeting Session & Event Lifecycle
- * Manages ConnectedRoom lifecycle, WebRTC media events, and in-call device switching.
+ * Meetrix WebRTC Demo - Meeting Session & Event Lifecycle
+ * Manages MeetrixRoom lifecycle, WebRTC media events, and in-call device switching.
  */
 
-import { ConnectedRoom, RemotePeer, Role } from '@connected/core';
+import { MeetrixRoom, RemotePeer, Role } from '@meetrix/core';
 import { state } from '../state';
 import {
   headerRoomId,
@@ -52,8 +52,8 @@ export async function handleJoinMeeting(switchView: NavigationCallback): Promise
   // Small pause to allow hardware camera driver to release cleanly before room media starts
   await new Promise((resolve) => setTimeout(resolve, 150));
 
-  // Create ConnectedRoom instance
-  state.room = new ConnectedRoom({ autoReconnect: true });
+  // Create MeetrixRoom instance
+  state.room = new MeetrixRoom({ autoReconnect: true });
   setupRoomEventHandlers(state.room, switchView);
 
   try {
@@ -100,9 +100,9 @@ export async function handleJoinMeeting(switchView: NavigationCallback): Promise
 }
 
 /**
- * Register all event handlers on the ConnectedRoom instance.
+ * Register all event handlers on the MeetrixRoom instance.
  */
-export function setupRoomEventHandlers(r: ConnectedRoom, switchView: NavigationCallback): void {
+export function setupRoomEventHandlers(r: MeetrixRoom, switchView: NavigationCallback): void {
   r.on('connected', (info) => {
     connectionStatus.textContent = 'Connected';
     connectionStatus.className = 'badge badge-connected';

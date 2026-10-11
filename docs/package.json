@@ -1,9 +1,9 @@
 {
-  "name": "@connected/docs",
+  "name": "@meetrix/docs",
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Documentation for Connected WebRTC Video Conferencing Framework & SFU",
+  "description": "Documentation for Meetrix WebRTC Video Conferencing Framework & SFU",
   "scripts": {
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",

@@ -1,8 +1,8 @@
 {
-  "name": "@connected/example-auth-webhook-node",
+  "name": "@meetrix/example-auth-webhook-node",
   "version": "0.1.0",
   "private": true,
-  "description": "Connected WebRTC authentication webhook reference server in Node.js",
+  "description": "Meetrix WebRTC authentication webhook reference server in Node.js",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

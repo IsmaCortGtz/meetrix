@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -50,7 +50,7 @@ func TestJWTAuthenticator(t *testing.T) {
 	}
 
 	// 1. Valid Token
-	claims := ConnectedClaims{
+	claims := MeetrixClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   "user-123",
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
@@ -98,7 +98,7 @@ func TestJWTAuthenticator(t *testing.T) {
 	}
 
 	// 3. Expired token
-	expiredClaims := ConnectedClaims{
+	expiredClaims := MeetrixClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   "user-expired",
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),

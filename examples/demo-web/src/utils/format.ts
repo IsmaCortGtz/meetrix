@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Formatting Utilities
+ * Meetrix WebRTC Demo - Formatting Utilities
  */
 
 /**

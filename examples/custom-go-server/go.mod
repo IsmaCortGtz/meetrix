@@ -1,8 +1,8 @@
-module github.com/IsmaCortGtz/connected/examples/custom-go-server
+module github.com/IsmaCortGtz/meetrix/examples/custom-go-server
 
 go 1.25.0
 
-require github.com/IsmaCortGtz/connected/server v0.0.0
+require github.com/IsmaCortGtz/meetrix/server v0.0.0
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
@@ -36,4 +36,4 @@ require (
 	golang.org/x/time v0.14.0 // indirect
 )
 
-replace github.com/IsmaCortGtz/connected/server => ../../server
+replace github.com/IsmaCortGtz/meetrix/server => ../../server

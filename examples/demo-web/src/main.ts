@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Framework - Google Meet-style Demo Web Application
+ * Meetrix WebRTC Framework - Google Meet-style Demo Web Application
  * Modular Application Entry Point.
  */
 

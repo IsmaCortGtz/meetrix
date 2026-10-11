@@ -1,9 +1,9 @@
 /**
- * Connected WebRTC Demo - In-Meeting Chat
+ * Meetrix WebRTC Demo - In-Meeting Chat
  * Handles chat message submission, message bubble rendering, and unread counters.
  */
 
-import type { ChatBroadcastPayload } from '@connected/core';
+import type { ChatBroadcastPayload } from '@meetrix/core';
 import { state } from '../state';
 import { chatForm, chatInput, chatMessages, chatUnreadBadge } from '../dom';
 import { escapeHtml, formatTime } from '../utils/format';

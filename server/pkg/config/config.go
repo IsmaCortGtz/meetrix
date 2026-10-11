@@ -89,10 +89,10 @@ func DefaultConfig() *Config {
 			PublicIP:      "auto",
 			TURN: TURNConfig{
 				Enabled: true,
-				Realm:   "connected",
+				Realm:   "meetrix",
 				Port:    3478,
 				Users: map[string]string{
-					"connected": "connected-secret",
+					"meetrix": "meetrix-secret",
 				},
 				Secret: "turn-shared-secret",
 			},
@@ -123,7 +123,7 @@ func DefaultConfig() *Config {
 				TimeoutMs: 5000,
 			},
 			JWT: JWTAuthConfig{
-				Secret:    "connected-jwt-secret",
+				Secret:    "meetrix-jwt-secret",
 				Algorithm: "HS256",
 				PublicKey: "",
 			},
@@ -156,63 +156,63 @@ func LoadConfig(path string) (*Config, error) {
 
 // applyEnvOverrides updates configuration with values from environment variables.
 func applyEnvOverrides(cfg *Config) {
-	if val := os.Getenv("CONNECTED_HTTP_PORT"); val != "" {
+	if val := os.Getenv("MEETRIX_HTTP_PORT"); val != "" {
 		if port, err := strconv.Atoi(val); err == nil {
 			cfg.Server.HTTPPort = port
 		}
 	}
-	if val := os.Getenv("CONNECTED_PUBLIC_IP"); val != "" {
+	if val := os.Getenv("MEETRIX_PUBLIC_IP"); val != "" {
 		cfg.Server.PublicIP = val
 	}
-	if val := os.Getenv("CONNECTED_WEBRTC_PORT_MIN"); val != "" {
+	if val := os.Getenv("MEETRIX_WEBRTC_PORT_MIN"); val != "" {
 		if p, err := strconv.ParseUint(val, 10, 16); err == nil {
 			cfg.Server.WebRTCPortMin = uint16(p)
 		}
 	}
-	if val := os.Getenv("CONNECTED_WEBRTC_PORT_MAX"); val != "" {
+	if val := os.Getenv("MEETRIX_WEBRTC_PORT_MAX"); val != "" {
 		if p, err := strconv.ParseUint(val, 10, 16); err == nil {
 			cfg.Server.WebRTCPortMax = uint16(p)
 		}
 	}
-	if val := os.Getenv("CONNECTED_TURN_ENABLED"); val != "" {
+	if val := os.Getenv("MEETRIX_TURN_ENABLED"); val != "" {
 		cfg.Server.TURN.Enabled = val == "true" || val == "1"
 	}
-	if val := os.Getenv("CONNECTED_TURN_PORT"); val != "" {
+	if val := os.Getenv("MEETRIX_TURN_PORT"); val != "" {
 		if port, err := strconv.Atoi(val); err == nil {
 			cfg.Server.TURN.Port = port
 		}
 	}
-	if val := os.Getenv("CONNECTED_TURN_REALM"); val != "" {
+	if val := os.Getenv("MEETRIX_TURN_REALM"); val != "" {
 		cfg.Server.TURN.Realm = val
 	}
-	if val := os.Getenv("CONNECTED_TURN_SECRET"); val != "" {
+	if val := os.Getenv("MEETRIX_TURN_SECRET"); val != "" {
 		cfg.Server.TURN.Secret = val
 	}
-	if val := os.Getenv("CONNECTED_ROOM_MAX_PARTICIPANTS"); val != "" {
+	if val := os.Getenv("MEETRIX_ROOM_MAX_PARTICIPANTS"); val != "" {
 		if max, err := strconv.Atoi(val); err == nil {
 			cfg.Room.DefaultMaxParticipants = max
 		}
 	}
-	if val := os.Getenv("CONNECTED_ROOM_SESSION_TIMEOUT"); val != "" {
+	if val := os.Getenv("MEETRIX_ROOM_SESSION_TIMEOUT"); val != "" {
 		if timeout, err := strconv.Atoi(val); err == nil {
 			cfg.Room.DefaultSessionTimeoutSec = timeout
 		}
 	}
-	if val := os.Getenv("CONNECTED_ROOM_EMPTY_TTL"); val != "" {
+	if val := os.Getenv("MEETRIX_ROOM_EMPTY_TTL"); val != "" {
 		if ttl, err := strconv.Atoi(val); err == nil {
 			cfg.Room.EmptyRoomTTLSec = ttl
 		}
 	}
-	if val := os.Getenv("CONNECTED_AUTH_PROVIDER"); val != "" {
+	if val := os.Getenv("MEETRIX_AUTH_PROVIDER"); val != "" {
 		cfg.Auth.Provider = val
 	}
-	if val := os.Getenv("CONNECTED_AUTH_JWT_SECRET"); val != "" {
+	if val := os.Getenv("MEETRIX_AUTH_JWT_SECRET"); val != "" {
 		cfg.Auth.JWT.Secret = val
 	}
-	if val := os.Getenv("CONNECTED_AUTH_WEBHOOK_URL"); val != "" {
+	if val := os.Getenv("MEETRIX_AUTH_WEBHOOK_URL"); val != "" {
 		cfg.Auth.Webhook.URL = val
 	}
-	if val := os.Getenv("CONNECTED_AUTH_EXEC_COMMAND"); val != "" {
+	if val := os.Getenv("MEETRIX_AUTH_EXEC_COMMAND"); val != "" {
 		cfg.Auth.Exec.Command = val
 	}
 }

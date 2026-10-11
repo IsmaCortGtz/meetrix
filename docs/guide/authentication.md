@@ -1,6 +1,6 @@
 # Authentication Modes
 
-Connected features a pluggable authentication architecture designed to integrate with existing user directories, single sign-on (SSO) providers, custom backend services, or microservices without modifying core media server code.
+Meetrix features a pluggable authentication architecture designed to integrate with existing user directories, single sign-on (SSO) providers, custom backend services, or microservices without modifying core media server code.
 
 Authentication is triggered when a client sends a `join` message with an authentication `token` over WebSocket.
 
@@ -87,18 +87,18 @@ The HTTP Webhook provider issues a synchronous `POST` request to an external HTT
 ```
 
 Environment variable overrides:
-- `CONNECTED_AUTH_PROVIDER=webhook`
-- `CONNECTED_AUTH_WEBHOOK_URL=https://auth.internal.example.com/api/v1/verify-session`
+- `MEETRIX_AUTH_PROVIDER=webhook`
+- `MEETRIX_AUTH_WEBHOOK_URL=https://auth.internal.example.com/api/v1/verify-session`
 
 ### HTTP Request Headers
 
-Connected includes the following headers with each webhook POST:
+Meetrix includes the following headers with each webhook POST:
 
 | Header | Value | Description |
 | :--- | :--- | :--- |
 | `Content-Type` | `application/json` | Request MIME format |
 | `Authorization` | `Bearer <secret>` | Configured shared webhook secret |
-| `X-Connected-Signature` | `<secret>` | Webhook signature token verification |
+| `X-Meetrix-Signature` | `<secret>` | Webhook signature token verification |
 
 ### Node.js / Express Webhook Example
 
@@ -174,8 +174,8 @@ The CLI Executable provider delegates authentication to an external script or bi
 ```
 
 Environment variable overrides:
-- `CONNECTED_AUTH_PROVIDER=exec`
-- `CONNECTED_AUTH_EXEC_COMMAND=/usr/local/bin/auth-verifier`
+- `MEETRIX_AUTH_PROVIDER=exec`
+- `MEETRIX_AUTH_EXEC_COMMAND=/usr/local/bin/auth-verifier`
 
 ### Python Script Example (`auth_verifier.py`)
 
@@ -292,7 +292,7 @@ if (req.token === 'secret-host-token') {
 
 ## 3. Native JWT Authentication
 
-Connected natively parses and validates JSON Web Tokens without making network hops or spawning external processes.
+Meetrix natively parses and validates JSON Web Tokens without making network hops or spawning external processes.
 
 ### Supported Algorithms
 
@@ -331,12 +331,12 @@ Connected natively parses and validates JSON Web Tokens without making network h
 :::
 
 Environment variable overrides:
-- `CONNECTED_AUTH_PROVIDER=jwt`
-- `CONNECTED_AUTH_JWT_SECRET=super-secret-jwt-signing-key-32-bytes`
+- `MEETRIX_AUTH_PROVIDER=jwt`
+- `MEETRIX_AUTH_JWT_SECRET=super-secret-jwt-signing-key-32-bytes`
 
-### Connected JWT Claims Schema
+### Meetrix JWT Claims Schema
 
-Connected parses the following registered and custom claims (`ConnectedClaims`):
+Meetrix parses the following registered and custom claims (`MeetrixClaims`):
 
 ```json
 {
@@ -367,7 +367,7 @@ Connected parses the following registered and custom claims (`ConnectedClaims`):
 ```
 
 > [!NOTE] Room Scope Validation
-> If the JWT contains a `room_id` claim, Connected validates that the token can **only** be used to enter that specific room. An attempt to join another room triggers an automatic token rejection.
+> If the JWT contains a `room_id` claim, Meetrix validates that the token can **only** be used to enter that specific room. An attempt to join another room triggers an automatic token rejection.
 
 ### Token Minting in Node.js
 
@@ -397,7 +397,7 @@ const token = jwt.sign(
 ### Token Minting in Go
 
 ```go
-claims := auth.ConnectedClaims{
+claims := auth.MeetrixClaims{
     RegisteredClaims: jwt.RegisteredClaims{
         Subject:   "usr_alice_123",
         ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
@@ -415,7 +415,7 @@ signedToken, err := token.SignedString([]byte("super-secret-jwt-signing-key-32-b
 
 ## 4. Native Go Code Extension
 
-When building a custom Go media server or embedding Connected inside an existing enterprise backend, you can directly implement the `auth.Authenticator` interface in Go.
+When building a custom Go media server or embedding Meetrix inside an existing enterprise backend, you can directly implement the `auth.Authenticator` interface in Go.
 
 ```go
 package main
@@ -425,8 +425,8 @@ import (
     "database/sql"
     "fmt"
 
-    "github.com/IsmaCortGtz/connected/server/pkg/auth"
-    "github.com/IsmaCortGtz/connected/server/pkg/permissions"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 )
 
 type DatabaseAuthenticator struct {

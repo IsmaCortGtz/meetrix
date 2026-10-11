@@ -1,6 +1,6 @@
-# Introduction to Connected
+# Introduction to Meetrix
 
-**Connected** is an extensible, self-hostable WebRTC video conferencing framework and Selective Forwarding Unit (SFU) written in Go, paired with a modern, zero-dependency TypeScript client SDK (`@connected/core`).
+**Meetrix** is an extensible, self-hostable WebRTC video conferencing framework and Selective Forwarding Unit (SFU) written in Go, paired with a modern, zero-dependency TypeScript client SDK (`@meetrix/core`).
 
 It is engineered for teams building interactive video communication platforms—such as video meeting suites, virtual classrooms, telehealth consultations, and remote collaboration tools—without the complexity of proprietary cloud lock-in or managing sprawling WebRTC infrastructure.
 
@@ -12,7 +12,7 @@ It is engineered for teams building interactive video communication platforms—
 - **Embedded RFC 5766/8656 STUN & TURN Relay**: Built directly into the media server daemon on UDP port `3478`. Eliminates external coturn daemons and simplifies NAT traversal.
 - **4 Pluggable Authentication Modes**: Seamlessly integrates with existing user directories using HTTP Webhooks, CLI executables (`stdin/stdout`), native signed JWTs, or embedded Go interfaces.
 - **Google Meet-Style Moderation Engine**: Native support for participant roles (`host`, `co-host`, `participant`, `viewer`), waiting room knocking/admitting, remote mute/stop-media, room policy locks, and session countdown timers.
-- **Universal TypeScript Client SDK**: `@connected/core` provides a headless, strictly typed API for managing devices, local tracks, remote peer states, real-time chat, and emoji reactions.
+- **Universal TypeScript Client SDK**: `@meetrix/core` provides a headless, strictly typed API for managing devices, local tracks, remote peer states, real-time chat, and emoji reactions.
 - **Turnkey Production Deployment**: Ready-to-run Docker and Docker Compose configurations, NAT 1:1 address handling, and reverse proxy templates for Nginx and Caddy.
 
 ---
@@ -41,9 +41,9 @@ flowchart LR
         MCUMix --> MC2
     end
 
-    subgraph SFU["Connected SFU"]
+    subgraph SFU["Meetrix SFU"]
         direction TB
-        S1((Client 1)) -->|1 Upload| SFUServer[Connected SFU<br/>Routes RTP Packets]
+        S1((Client 1)) -->|1 Upload| SFUServer[Meetrix SFU<br/>Routes RTP Packets]
         S2((Client 2)) -->|1 Upload| SFUServer
         SFUServer -->|N-1 Downloads| S1
         SFUServer -->|N-1 Downloads| S2
@@ -61,13 +61,13 @@ In a full mesh topology, every participant establishes a direct peer-to-peer con
 
 An MCU server decodes incoming video from all participants, stitches them into a composite video grid, and re-encodes a single stream back to each participant. While this minimizes client bandwidth ($O(1)$), it requires massive GPU or CPU compute clusters on the server and introduces noticeable transcoding latency (100–300 ms).
 
-### Why Connected Uses an SFU
+### Why Meetrix Uses an SFU
 
-Connected implements a **Selective Forwarding Unit**:
+Meetrix implements a **Selective Forwarding Unit**:
 1. **$O(N)$ Bandwidth on Clients**: Each client encodes and uploads **exactly one** audio and video stream to the server. The server duplicates and forwards RTP packets to the other $N - 1$ peers.
-2. **Sub-Millisecond Packet Forwarding**: Connected inspects and routes RTP packets at layer 4 without decoding or re-encoding media frames, achieving near-zero server-side latency.
+2. **Sub-Millisecond Packet Forwarding**: Meetrix inspects and routes RTP packets at layer 4 without decoding or re-encoding media frames, achieving near-zero server-side latency.
 3. **Bandwidth Optimization**: Clients receive individual streams, allowing responsive UI layouts (e.g., pinning an active speaker or hiding off-screen video).
-4. **Adaptive Keyframe Sync**: Connected intercepts Picture Loss Indication (PLI) feedback and requests keyframes from senders on-demand when new participants subscribe.
+4. **Adaptive Keyframe Sync**: Meetrix intercepts Picture Loss Indication (PLI) feedback and requests keyframes from senders on-demand when new participants subscribe.
 
 ---
 
@@ -80,7 +80,7 @@ Traditionally, deploying WebRTC requires managing an auxiliary `coturn` server a
 - Complex orchestration and port synchronization across two independent software systems.
 - Fragile credential exchange between the application server and the TURN daemon.
 
-**Connected embeds an RFC 5766 / RFC 8656 TURN UDP relay directly into the Go server process on port `3478`:**
+**Meetrix embeds an RFC 5766 / RFC 8656 TURN UDP relay directly into the Go server process on port `3478`:**
 
 - **Unified Configuration**: Media limits, authentication credentials, and TURN secrets reside in a single `config.json` or set of environment variables.
 - **Seamless ICE Exchange**: When a peer connects over WebSocket, the server automatically issues matching ICE server configuration containing the server's public IP and embedded TURN credentials.
@@ -90,13 +90,13 @@ Traditionally, deploying WebRTC requires managing an auxiliary `coturn` server a
 
 ## Ecosystem Overview
 
-Connected consists of three decoupled components:
+Meetrix consists of three decoupled components:
 
 ```mermaid
 graph TD
-    subgraph Core["Connected Ecosystem"]
+    subgraph Core["Meetrix Ecosystem"]
         Server["Go Media Server (:8080 TCP, :3478 UDP, :50000-50200 UDP)<br/>• Pion WebRTC v4 SFU<br/>• Embedded STUN/TURN<br/>• WebSocket Signaling<br/>• Moderation Engine"]
-        SDK["@connected/core Client SDK<br/>• Headless WebRTC Client<br/>• Device & Track Management<br/>• Audio Activity Detection<br/>• Moderation Actions"]
+        SDK["@meetrix/core Client SDK<br/>• Headless WebRTC Client<br/>• Device & Track Management<br/>• Audio Activity Detection<br/>• Moderation Actions"]
         Auth["Authentication Providers<br/>• HTTP Webhook<br/>• CLI Stdin/Stdout<br/>• Native Signed JWT<br/>• Native Go Extension"]
     end
 
@@ -105,7 +105,7 @@ graph TD
 ```
 
 1. **`server/`**: The Go SFU media engine. Manages room state, participant lifecycle, packet routing, permissions, and STUN/TURN relays.
-2. **`packages/core`**: The `@connected/core` TypeScript library. Provides high-level abstractions for browser video conferencing without dictating any UI framework (works with React, Vue, Svelte, or vanilla JS).
+2. **`packages/core`**: The `@meetrix/core` TypeScript library. Provides high-level abstractions for browser video conferencing without dictating any UI framework (works with React, Vue, Svelte, or vanilla JS).
 3. **`examples/`**: Ready-to-run reference implementations showcasing custom authenticators, embedded servers, and web applications.
 
 ---

@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Type-safe Event Emitter
+ * Meetrix WebRTC Core SDK - Type-safe Event Emitter
  * Lightweight, zero-dependency event emitter for browser and headless environments.
  */
 

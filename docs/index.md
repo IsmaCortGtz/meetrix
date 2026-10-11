@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: "Connected"
+  name: "Meetrix"
   text: "Extensible WebRTC Video Conferencing & SFU"
   tagline: High-performance Go SFU, embedded STUN/TURN UDP relay, Google Meet-style moderation, and universal TypeScript client SDK.
   actions:
@@ -17,7 +17,7 @@ hero:
       link: /api/client-core-sdk
   image:
     src: /logo.svg
-    alt: Connected Logo
+    alt: Meetrix Logo
 
 features:
   - icon: ⚡
@@ -47,13 +47,13 @@ features:
 ```mermaid
 flowchart TB
     subgraph Clients["Client Applications"]
-        Host["Host (WebRTC + WS)<br/>@connected/core"]
-        User1["Participant 1<br/>@connected/core"]
-        User2["Participant 2<br/>@connected/core"]
+        Host["Host (WebRTC + WS)<br/>@meetrix/core"]
+        User1["Participant 1<br/>@meetrix/core"]
+        User2["Participant 2<br/>@meetrix/core"]
         Lobby["Knocking User<br/>(Lobby State)"]
     end
 
-    subgraph Server["Connected Go Media Server"]
+    subgraph Server["Meetrix Go Media Server"]
         subgraph Signaling["Signaling Plane (:8080 TCP)"]
             WSHub["WebSocket Hub"]
             Auth["Auth Provider<br/>(Webhook / Exec / JWT / Go)"]
@@ -95,14 +95,14 @@ flowchart TB
 ::: code-group
 
 ```bash [TypeScript SDK]
-npm install @connected/core
+npm install @meetrix/core
 ```
 
 ```bash [Go Server Core]
-git clone https://github.com/IsmaCortGtz/connected.git
-cd connected/server
-go build -o connected-server ./cmd/server
-./connected-server -config config.json
+git clone https://github.com/IsmaCortGtz/meetrix.git
+cd meetrix/server
+go build -o meetrix-server ./cmd/server
+./meetrix-server -config config.json
 ```
 
 ```bash [Docker Compose]
@@ -120,7 +120,7 @@ docker compose up -d
 | **Signaling Protocol** | Real-time WebSocket envelope protocol (`join`, `offer`, `answer`, `candidate`, `chat`, `moderation`) |
 | **Authentication Providers** | HTTP Webhook, CLI executable `stdin/stdout`, Native JWT (`HS256`/`RS256`), Native Go interface |
 | **Moderation Engine** | Google Meet-style Roles (`host`, `co-host`, `participant`, `viewer`), Waiting Lobby, Remote Mute, Policy Locks |
-| **Client Core SDK** | `@connected/core` (Dual ESM/CJS, IIFE global, strict DTS typings, zero UI opinions) |
+| **Client Core SDK** | `@meetrix/core` (Dual ESM/CJS, IIFE global, strict DTS typings, zero UI opinions) |
 | **Port Allocation** | TCP `8080` (HTTP/Signaling), UDP `3478` (STUN/TURN), UDP `50000-50200` (WebRTC RTP/RTCP) |
 
 </div>

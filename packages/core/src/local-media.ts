@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Local Media Management
+ * Meetrix WebRTC Core SDK - Local Media Management
  * Handles browser media capture (getUserMedia, getDisplayMedia), device enumeration,
  * track muting, switching, and audio activity detection.
  */

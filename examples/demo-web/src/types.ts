@@ -1,9 +1,9 @@
 /**
- * Connected WebRTC Demo - Application Types
+ * Meetrix WebRTC Demo - Application Types
  * Type definitions for view routing, sidebar tabs, and media tiles.
  */
 
-import type { Role } from '@connected/core';
+import type { Role } from '@meetrix/core';
 
 /**
  * Screen views in the Google Meet workflow.

@@ -1,10 +1,10 @@
-# Project Roadmap: Connected WebRTC Framework
+# Project Roadmap: Meetrix WebRTC Framework
 
 ## Milestone Overview
 
 ```mermaid
 gantt
-    title Connected Development Roadmap
+    title Meetrix Development Roadmap
     dateFormat  YYYY-MM-DD
     section Phase 1: Go Server Core
     Project Setup & Config          :done, p1_1, 2026-10-10, 1d
@@ -79,7 +79,7 @@ gantt
   - WebSocket client with exponential backoff reconnect.
   - Automatic SDP Offer/Answer negotiation and Trickle ICE candidate forwarding.
   - Subscription to remote tracks and HTML `<audio>` / `<video>` element binding helpers.
-- [ ] **2.4 ConnectedRoom & Moderation API (`src/room.ts`, `src/moderation.ts`)**
+- [ ] **2.4 MeetrixRoom & Moderation API (`src/room.ts`, `src/moderation.ts`)**
   - Event-driven API (`on('participantJoined')`, `on('trackSubscribed')`, `on('chatMessage')`, etc.).
   - Host moderation functions (`muteParticipant()`, `kick()`, `admit()`, `setPolicies()`).
   - Chat and reaction dispatchers.
@@ -93,7 +93,7 @@ gantt
 - [ ] **3.2 Node.js Auth Webhook Example (`examples/auth-webhook-node`)**
   - Express/HTTP server demonstrating how a developer's backend validates room tokens.
 - [ ] **3.3 Custom Go Server Example (`examples/custom-go-server`)**
-  - Custom Go binary importing `github.com/.../connected/server/pkg` to show embedded native extension.
+  - Custom Go binary importing `github.com/.../meetrix/server/pkg` to show embedded native extension.
 
 ---
 

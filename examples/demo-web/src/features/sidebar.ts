@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Sidebar Drawer
+ * Meetrix WebRTC Demo - Sidebar Drawer
  * Handles tab transitions between Chat, People, and Host Controls.
  */
 

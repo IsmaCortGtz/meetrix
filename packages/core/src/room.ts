@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - ConnectedRoom
+ * Meetrix WebRTC Core SDK - MeetrixRoom
  * The primary entry point for managing conference rooms, local/remote media,
  * signaling lifecycle, real-time chat, emoji reactions, and host moderation.
  */
@@ -236,7 +236,7 @@ export class LocalParticipant {
   }
 }
 
-export class ConnectedRoom extends TypedEventEmitter<RoomEventMap> {
+export class MeetrixRoom extends TypedEventEmitter<RoomEventMap> {
   private _state: RoomConnectionState = 'disconnected';
   private _roomId: string = '';
   private _sessionRemainingSec: number = 0;
@@ -820,3 +820,4 @@ export class ConnectedRoom extends TypedEventEmitter<RoomEventMap> {
     });
   }
 }
+

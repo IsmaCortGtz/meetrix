@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Audio Activity & Voice Activity Detector (VAD)
+ * Meetrix WebRTC Core SDK - Audio Activity & Voice Activity Detector (VAD)
  * Analyzes microphone audio streams using Web Audio API to report real-time levels and speech state.
  */
 

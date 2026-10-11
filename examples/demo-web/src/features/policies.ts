@@ -1,9 +1,9 @@
 /**
- * Connected WebRTC Demo - Room Policies
+ * Meetrix WebRTC Demo - Room Policies
  * Manages host policy checkboxes and policy change broadcasts.
  */
 
-import type { RoomPolicy } from '@connected/core';
+import type { RoomPolicy } from '@meetrix/core';
 import { state } from '../state';
 import {
   policyMic,

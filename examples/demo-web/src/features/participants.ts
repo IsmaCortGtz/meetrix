@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Participants & Moderation Panel
+ * Meetrix WebRTC Demo - Participants & Moderation Panel
  * Renders in-call participants, waiting lobby queue, and moderator actions.
  */
 

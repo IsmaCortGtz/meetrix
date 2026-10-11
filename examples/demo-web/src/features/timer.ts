@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Timers & Clock
+ * Meetrix WebRTC Demo - Timers & Clock
  * Manages Google Meet-style home clock and in-meeting session countdown ticker.
  */
 

@@ -1,25 +1,25 @@
-# TypeScript Core SDK Reference (`@connected/core`)
+# TypeScript Core SDK Reference (`@meetrix/core`)
 
-`@connected/core` is a lightweight, zero-dependency WebRTC client SDK for building audio/video conferencing applications in the browser. It exposes strictly typed APIs for device management, track handling, room lifecycle, chat, reactions, and Google Meet-style moderation.
+`@meetrix/core` is a lightweight, zero-dependency WebRTC client SDK for building audio/video conferencing applications in the browser. It exposes strictly typed APIs for device management, track handling, room lifecycle, chat, reactions, and Google Meet-style moderation.
 
 ---
 
 ## Installation
 
 ```bash
-npm install @connected/core
+npm install @meetrix/core
 ```
 
 ---
 
-## `ConnectedRoom`
+## `MeetrixRoom`
 
-`ConnectedRoom` is the primary orchestrator that connects local devices, WebSocket signaling, and Pion SFU peer connections into a cohesive session.
+`MeetrixRoom` is the primary orchestrator that connects local devices, WebSocket signaling, and Pion SFU peer connections into a cohesive session.
 
 ```typescript
-import { ConnectedRoom } from '@connected/core';
+import { MeetrixRoom } from '@meetrix/core';
 
-const room = new ConnectedRoom({
+const room = new MeetrixRoom({
   reconnectAttempts: 5,
   reconnectDelayMs: 1000,
 });
@@ -74,7 +74,7 @@ await room.leave();
 
 ## Chat & Reactions API
 
-`ConnectedRoom` provides dedicated sub-APIs for real-time messaging:
+`MeetrixRoom` provides dedicated sub-APIs for real-time messaging:
 
 ### `room.chat`
 

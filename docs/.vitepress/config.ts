@@ -2,20 +2,20 @@ import process from 'node:process';
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: 'Connected',
+  title: 'Meetrix',
   description: 'Extensible WebRTC Video Conferencing Framework & SFU',
-  base: process.env.VITEPRESS_BASE || '/connected/',
+  base: process.env.VITEPRESS_BASE || '/meetrix/',
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#3b82f6' }],
     ['meta', { name: 'og:type', content: 'website' }],
-    ['meta', { name: 'og:title', content: 'Connected - WebRTC Framework & SFU' }],
+    ['meta', { name: 'og:title', content: 'Meetrix - WebRTC Framework & SFU' }],
     ['meta', { name: 'og:description', content: 'Extensible WebRTC video conferencing framework with Go SFU, embedded STUN/TURN, and TypeScript SDK.' }],
   ],
 
   themeConfig: {
-    siteTitle: 'Connected',
+    siteTitle: 'Meetrix',
     logo: '/logo.svg',
 
     nav: [
@@ -25,8 +25,8 @@ export default defineConfig({
       {
         text: 'v0.1.0',
         items: [
-          { text: 'Changelog', link: 'https://github.com/IsmaCortGtz/connected/releases' },
-          { text: 'Roadmap', link: 'https://github.com/IsmaCortGtz/connected/blob/main/ROADMAP.md' },
+          { text: 'Changelog', link: 'https://github.com/IsmaCortGtz/meetrix/releases' },
+          { text: 'Roadmap', link: 'https://github.com/IsmaCortGtz/meetrix/blob/main/ROADMAP.md' },
         ],
       },
     ],
@@ -71,12 +71,12 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/IsmaCortGtz/connected' },
+      { icon: 'github', link: 'https://github.com/IsmaCortGtz/meetrix' },
     ],
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2026 Connected Contributors',
+      copyright: 'Copyright © 2026 Meetrix Contributors',
     },
 
     search: {

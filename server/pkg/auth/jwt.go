@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// ConnectedClaims represents the expected JWT payload claims for Connected.
-type ConnectedClaims struct {
+// MeetrixClaims represents the expected JWT payload claims for Meetrix.
+type MeetrixClaims struct {
 	jwt.RegisteredClaims
 	UserID      string                       `json:"user_id,omitempty"`
 	DisplayName string                       `json:"display_name,omitempty"`
@@ -71,7 +71,7 @@ func (j *JWTAuthenticator) Authenticate(ctx context.Context, req AuthRequest) (*
 		}, nil
 	}
 
-	token, err := jwt.ParseWithClaims(req.Token, &ConnectedClaims{}, func(t *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(req.Token, &MeetrixClaims{}, func(t *jwt.Token) (interface{}, error) {
 		// Validate signing algorithm family
 		if strings.HasPrefix(j.algorithm, "HS") {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -101,7 +101,7 @@ func (j *JWTAuthenticator) Authenticate(ctx context.Context, req AuthRequest) (*
 		}, nil
 	}
 
-	claims, ok := token.Claims.(*ConnectedClaims)
+	claims, ok := token.Claims.(*MeetrixClaims)
 	if !ok {
 		return &AuthResponse{
 			Allowed: false,

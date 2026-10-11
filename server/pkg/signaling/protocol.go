@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
 	"github.com/pion/webrtc/v4"
 )
 

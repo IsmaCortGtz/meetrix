@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Video Grid & Tile Layout
+ * Meetrix WebRTC Demo - Video Grid & Tile Layout
  * Handles rendering and synchronization of local, remote, and screen-sharing media tiles.
  */
 

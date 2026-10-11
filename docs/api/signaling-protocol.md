@@ -1,6 +1,6 @@
 # Signaling Wire Protocol Specification
 
-Connected utilizes a bidirectional WebSocket connection at `/ws` for session initiation, SDP exchange, ICE candidate trickle, real-time messaging, and moderation events.
+Meetrix utilizes a bidirectional WebSocket connection at `/ws` for session initiation, SDP exchange, ICE candidate trickle, real-time messaging, and moderation events.
 
 ---
 
@@ -296,8 +296,8 @@ Sent in response to a successful `join` request. Contains initial room metadata,
       { "urls": "stun:stun.l.google.com:19302" },
       {
         "urls": "turn:turn.example.com:3478?transport=udp",
-        "username": "connected",
-        "credential": "connected-secret"
+        "username": "meetrix",
+        "credential": "meetrix-secret"
       }
     ]
   }

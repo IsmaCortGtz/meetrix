@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
 	pionturn "github.com/pion/turn/v3"
 )
 

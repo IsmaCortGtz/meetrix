@@ -1,6 +1,6 @@
-# Connected Authentication Webhook Server (Node.js)
+# Meetrix Authentication Webhook Server (Node.js)
 
-This reference example demonstrates how an external Node.js backend validates meeting access and assigns roles/permissions for the Connected WebRTC SFU server.
+This reference example demonstrates how an external Node.js backend validates meeting access and assigns roles/permissions for the Meetrix WebRTC SFU server.
 
 ## Overview
 When a client connects to the Go signaling server with credentials (`room_id`, `token`, `display_name`, `metadata`), the Go server sends an HTTP `POST` to this webhook endpoint to verify authorization.

@@ -1,10 +1,10 @@
 /**
- * Connected WebRTC Demo - Remote Audio Management
+ * Meetrix WebRTC Demo - Remote Audio Management
  * Synchronizes HTMLAudioElement instances for remote peer microphone & screen share tracks.
  * Handles browser autoplay policies and Chromium power-saving audio buffer throttling.
  */
 
-import type { ConnectedRoom } from '@connected/core';
+import type { MeetrixRoom } from '@meetrix/core';
 import { audioUnlockBanner, btnUnlockAudio } from '../dom';
 
 let remoteAudioContainer: HTMLElement | null = null;
@@ -33,7 +33,7 @@ function getAudioContainer(): HTMLElement {
 /**
  * Synchronize remote audio elements for all peers in the room.
  */
-export function syncRemoteAudioElements(room: ConnectedRoom): void {
+export function syncRemoteAudioElements(room: MeetrixRoom): void {
   const container = getAudioContainer();
   const activeAudioElementIds = new Set<string>();
 

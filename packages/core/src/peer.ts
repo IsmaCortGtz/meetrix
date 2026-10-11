@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Remote Peer Model
+ * Meetrix WebRTC Core SDK - Remote Peer Model
  * Represents a remote participant connected to the room, tracking their media streams,
  * state (muted, hand raised, screen sharing), role, and voice activity.
  */

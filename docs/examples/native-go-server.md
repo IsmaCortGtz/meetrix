@@ -1,12 +1,12 @@
 # Native Go Server Extension
 
-The **Native Go Server** example demonstrates how to embed Connected as an internal Go library within a custom server application, enabling direct integration with your existing Go microservices, database pools, and custom authentication handlers.
+The **Native Go Server** example demonstrates how to embed Meetrix as an internal Go library within a custom server application, enabling direct integration with your existing Go microservices, database pools, and custom authentication handlers.
 
 ---
 
 ## Architectural Concept
 
-Connected is designed with modular Go packages under `server/pkg/`:
+Meetrix is designed with modular Go packages under `server/pkg/`:
 - `pkg/config`: Server and room configuration models.
 - `pkg/turn`: Standalone RFC 5766/8656 STUN/TURN UDP server.
 - `pkg/sfu`: Pion WebRTC SFU engine and track router.
@@ -31,13 +31,13 @@ import (
     "os/signal"
     "syscall"
 
-    "github.com/IsmaCortGtz/connected/server/pkg/auth"
-    "github.com/IsmaCortGtz/connected/server/pkg/config"
-    "github.com/IsmaCortGtz/connected/server/pkg/permissions"
-    "github.com/IsmaCortGtz/connected/server/pkg/room"
-    "github.com/IsmaCortGtz/connected/server/pkg/sfu"
-    "github.com/IsmaCortGtz/connected/server/pkg/signaling"
-    "github.com/IsmaCortGtz/connected/server/pkg/turn"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/config"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/room"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/signaling"
+    "github.com/IsmaCortGtz/meetrix/server/pkg/turn"
 )
 
 // CustomAuthenticator implements auth.Authenticator using custom business logic

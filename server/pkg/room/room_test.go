@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
 	"github.com/pion/webrtc/v4"
 )
 

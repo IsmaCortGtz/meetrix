@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Screen Navigation & Routing
+ * Meetrix WebRTC Demo - Screen Navigation & Routing
  * Controls screen transitions, URL pushState routing, and Google Meet landing page actions.
  */
 

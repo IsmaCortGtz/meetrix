@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 )
 
 // RoomManager maintains active room instances and cleans up dormant empty rooms.

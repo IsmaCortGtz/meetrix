@@ -1,13 +1,13 @@
 /**
- * Connected WebRTC Demo - Central Application State
+ * Meetrix WebRTC Demo - Central Application State
  * Manages mutable state for the active room, preview streams, and UI panels.
  */
 
-import type { ConnectedRoom, ParticipantInfo } from '@connected/core';
+import type { MeetrixRoom, ParticipantInfo } from '@meetrix/core';
 import type { SidebarTab } from './types';
 
 export interface AppState {
-  room: ConnectedRoom | null;
+  room: MeetrixRoom | null;
   previewStream: MediaStream | null;
   isPreviewMicMuted: boolean;
   isPreviewCamMuted: boolean;

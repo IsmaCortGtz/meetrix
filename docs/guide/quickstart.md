@@ -1,6 +1,6 @@
 # Quickstart Guide
 
-This guide will walk you through setting up a local Connected environment, starting the Go SFU media server, and connecting two browser peers using the `@connected/core` client SDK.
+This guide will walk you through setting up a local Meetrix environment, starting the Go SFU media server, and connecting two browser peers using the `@meetrix/core` client SDK.
 
 ---
 
@@ -18,8 +18,8 @@ Before starting, ensure you have the following installed on your machine:
 Clone the repository and install repository dependencies:
 
 ```bash
-git clone https://github.com/IsmaCortGtz/connected.git
-cd connected
+git clone https://github.com/IsmaCortGtz/meetrix.git
+cd meetrix
 npm install
 ```
 
@@ -40,8 +40,8 @@ go run ./cmd/server -config config.json
 
 ```bash [Building binary]
 cd server
-go build -o connected-server ./cmd/server
-./connected-server -config config.json
+go build -o meetrix-server ./cmd/server
+./meetrix-server -config config.json
 ```
 
 :::
@@ -50,20 +50,20 @@ You should see log output confirming that both the HTTP/WebSocket signaling serv
 
 ```text
 2026/10/10 14:00:00 [CONFIG] Loaded config from "config.json"
-2026/10/10 14:00:00 [TURN] Embedded STUN/TURN server listening on 0.0.0.0:3478 (realm: connected)
+2026/10/10 14:00:00 [TURN] Embedded STUN/TURN server listening on 0.0.0.0:3478 (realm: meetrix)
 2026/10/10 14:00:00 [SFU] Initialized Pion SFU (Port range: 50000-50200, Public IP: auto)
 2026/10/10 14:00:00 [AUTH] Initialized Authenticator: allow_all
-2026/10/10 14:00:00 [SERVER] Connected SFU signaling server running on http://0.0.0.0:8080
+2026/10/10 14:00:00 [SERVER] Meetrix SFU signaling server running on http://0.0.0.0:8080
 ```
 
 ---
 
 ## Step 3: Install the Client SDK
 
-Install `@connected/core` into your frontend project:
+Install `@meetrix/core` into your frontend project:
 
 ```bash
-npm install @connected/core
+npm install @meetrix/core
 ```
 
 If you are developing inside the monorepo, build the package first:
@@ -85,7 +85,7 @@ Here is a minimal, complete browser implementation using vanilla TypeScript or m
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Connected WebRTC Call</title>
+  <title>Meetrix WebRTC Call</title>
   <style>
     body { font-family: sans-serif; margin: 2rem; background: #0f172a; color: #f8fafc; }
     .grid { display: flex; gap: 1rem; margin-top: 1rem; }
@@ -94,7 +94,7 @@ Here is a minimal, complete browser implementation using vanilla TypeScript or m
   </style>
 </head>
 <body>
-  <h1>Connected WebRTC Quickstart</h1>
+  <h1>Meetrix WebRTC Quickstart</h1>
   <button id="joinBtn">Join Room</button>
   <button id="leaveBtn" disabled>Leave Room</button>
 
@@ -117,10 +117,10 @@ Here is a minimal, complete browser implementation using vanilla TypeScript or m
 ### Application Logic (`app.ts`)
 
 ```typescript
-import { ConnectedRoom } from '@connected/core';
+import { MeetrixRoom } from '@meetrix/core';
 
 // 1. Instantiate the room client
-const room = new ConnectedRoom();
+const room = new MeetrixRoom();
 
 const joinBtn = document.getElementById('joinBtn') as HTMLButtonElement;
 const leaveBtn = document.getElementById('leaveBtn') as HTMLButtonElement;

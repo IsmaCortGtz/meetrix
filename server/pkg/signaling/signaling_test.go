@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/auth"
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
 	"github.com/gorilla/websocket"
 )
 
@@ -131,7 +131,7 @@ func TestSignalingJoinAndChat(t *testing.T) {
 	}
 
 	// 3. Send Chat message from Client 1
-	chatMsg, _ := EncodeMessage(TypeChatMessage, ChatMessagePayload{Text: "Welcome to Connected!"})
+	chatMsg, _ := EncodeMessage(TypeChatMessage, ChatMessagePayload{Text: "Welcome to Meetrix!"})
 	if err := conn1.WriteMessage(websocket.TextMessage, chatMsg); err != nil {
 		t.Fatalf("failed to send chat message: %v", err)
 	}
@@ -151,7 +151,7 @@ func TestSignalingJoinAndChat(t *testing.T) {
 
 	var chatPayload ChatBroadcastPayload
 	_ = json.Unmarshal(chatEnv.Payload, &chatPayload)
-	if chatPayload.Text != "Welcome to Connected!" {
+	if chatPayload.Text != "Welcome to Meetrix!" {
 		t.Errorf("expected chat message content, got %s", chatPayload.Text)
 	}
 	if chatPayload.DisplayName != "HostUser" {

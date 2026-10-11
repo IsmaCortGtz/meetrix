@@ -1,6 +1,6 @@
 /**
- * @connected/core
- * Universal WebRTC Client SDK for Connected Video Conferencing.
+ * @meetrix/core
+ * Universal WebRTC Client SDK for Meetrix Video Conferencing.
  * Zero external UI dependencies, strict TypeScript typing, and full browser media & SFU protocol support.
  */
 

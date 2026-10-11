@@ -1,12 +1,12 @@
 # Permissions & Moderation
 
-Connected provides Google Meet-style hierarchical moderation and participant management out of the box. Hosts can manage large-scale conference calls with granular media permissions, waiting room knock-to-enter flows, remote muting, and session countdown timers.
+Meetrix provides Google Meet-style hierarchical moderation and participant management out of the box. Hosts can manage large-scale conference calls with granular media permissions, waiting room knock-to-enter flows, remote muting, and session countdown timers.
 
 ---
 
 ## Role Hierarchy Model
 
-Every participant in a Connected room is assigned exactly one role:
+Every participant in a Meetrix room is assigned exactly one role:
 
 ```mermaid
 graph TD
@@ -52,7 +52,7 @@ When `require_lobby: true` is enabled in `RoomPolicy`, incoming participants do 
 sequenceDiagram
     autonumber
     actor KnockingUser as Guest Participant
-    participant Server as Connected Server
+    participant Server as Meetrix Server
     actor HostUser as Room Host
 
     KnockingUser->>Server: Envelope: type="join"
@@ -69,9 +69,9 @@ sequenceDiagram
 ### Client SDK Lobby Handling
 
 ```typescript
-import { ConnectedRoom } from '@connected/core';
+import { MeetrixRoom } from '@meetrix/core';
 
-const room = new ConnectedRoom();
+const room = new MeetrixRoom();
 
 // 1. Participant knocks and waits in lobby
 room.on('lobbyWaiting', (message) => {
@@ -116,7 +116,7 @@ room.moderation.mute(targetPeerId, 'video');
 
 When a participant is remotely muted:
 1. The server notifies the target peer with a `peer_muted` envelope.
-2. The `@connected/core` SDK automatically disables the corresponding local track.
+2. The `@meetrix/core` SDK automatically disables the corresponding local track.
 3. All peers in the room receive the update to synchronize participant tile UI icons.
 
 ```typescript
@@ -170,7 +170,7 @@ room.on('policyUpdated', (newPolicy) => {
 
 ## Session Countdown Timers & TTL
 
-To prevent unattended rooms from consuming cloud compute resources, Connected incorporates native session timers.
+To prevent unattended rooms from consuming cloud compute resources, Meetrix incorporates native session timers.
 
 ### Configuration
 

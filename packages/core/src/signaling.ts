@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Signaling Client
+ * Meetrix WebRTC Core SDK - Signaling Client
  * Manages WebSocket connection, message serialization/deserialization,
  * event dispatching, and resilient auto-reconnect with exponential backoff.
  */

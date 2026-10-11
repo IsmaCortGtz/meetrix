@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 )
 
 // WebhookAuthenticator delegates authentication to a custom HTTP endpoint.
@@ -56,7 +56,7 @@ func (w *WebhookAuthenticator) Authenticate(ctx context.Context, req AuthRequest
 	httpReq.Header.Set("Content-Type", "application/json")
 	if w.secret != "" {
 		httpReq.Header.Set("Authorization", "Bearer "+w.secret)
-		httpReq.Header.Set("X-Connected-Signature", w.secret)
+		httpReq.Header.Set("X-Meetrix-Signature", w.secret)
 	}
 
 	httpResp, err := w.client.Do(httpReq)

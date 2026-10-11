@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Room Code Utilities
+ * Meetrix WebRTC Demo - Room Code Utilities
  * Generates and sanitizes Google Meet-style meeting codes (e.g. abc-defg-hij).
  */
 

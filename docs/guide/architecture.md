@@ -1,6 +1,6 @@
 # Architecture & Media Plane
 
-Connected decouples real-time communication into three distinct planes:
+Meetrix decouples real-time communication into three distinct planes:
 1. **Signaling Plane**: JSON envelopes transported over full-duplex WebSockets for session negotiation, room state, chat, reactions, and moderation.
 2. **Media Plane**: High-throughput SRTP audio and video streams routed through a Go Selective Forwarding Unit (SFU) powered by Pion WebRTC v4.
 3. **Relay Plane**: An embedded RFC 5766/8656 STUN and TURN UDP listener guaranteeing NAT and firewall traversal without third-party services.
@@ -11,12 +11,12 @@ Connected decouples real-time communication into three distinct planes:
 
 ```mermaid
 flowchart TB
-    subgraph Clients["WebRTC Clients (@connected/core)"]
+    subgraph Clients["WebRTC Clients (@meetrix/core)"]
         ClientA["Peer A (Publisher & Subscriber)"]
         ClientB["Peer B (Subscriber)"]
     end
 
-    subgraph Server["Connected Go Media Server"]
+    subgraph Server["Meetrix Go Media Server"]
         subgraph SignalingPlane["Signaling Plane (:8080 TCP)"]
             WSHub["WebSocket Hub & Connection Pool"]
             RoomManager["Room State Manager"]
@@ -76,7 +76,7 @@ localTrack, err := webrtc.NewTrackLocalStaticRTP(
 
 ### Zero-Copy Packet Forwarding Loop
 
-To maintain maximum throughput and minimal CPU overhead, Connected forwards incoming RTP packets directly to the local static track without decoding:
+To maintain maximum throughput and minimal CPU overhead, Meetrix forwards incoming RTP packets directly to the local static track without decoding:
 
 ```go
 go func() {
@@ -112,7 +112,7 @@ In video codecs like VP8 and H.264, video frames are categorized as:
 When a new participant (Peer B) joins an ongoing room where Peer A is already publishing video:
 1. Peer B receives delta frames that depend on past keyframes that Peer B never received.
 2. Without intervention, Peer B's video decoder would freeze or render gray corruption for up to 10–30 seconds until the encoder naturally sends a periodic keyframe.
-3. **Connected resolves this immediately**:
+3. **Meetrix resolves this immediately**:
    - In `Peer.Subscribe()`, the SFU immediately dispatches an RTCP Picture Loss Indication (`rtcp.PictureLossIndication`) to the publisher's SSRC:
      ```go
      if pubTrack.Kind == webrtc.RTPCodecTypeVideo && publisher != nil {
@@ -125,7 +125,7 @@ When a new participant (Peer B) joins an ongoing room where Peer A is already pu
 sequenceDiagram
     autonumber
     actor Publisher as Peer A (Publisher)
-    participant SFU as Connected SFU
+    participant SFU as Meetrix SFU
     actor Subscriber as Peer B (New Subscriber)
 
     Subscriber->>SFU: Subscribe to Peer A's video track
@@ -141,7 +141,7 @@ sequenceDiagram
 
 ### Dynamic Port Allocation
 
-In production container environments (Docker, Kubernetes), opening tens of thousands of UDP ports can cause port exhaustion and firewall complexity. Connected lets operators strictly bound the ephemeral WebRTC media ports via `webrtc_port_min` and `webrtc_port_max` (defaults: `50000` to `50200`):
+In production container environments (Docker, Kubernetes), opening tens of thousands of UDP ports can cause port exhaustion and firewall complexity. Meetrix lets operators strictly bound the ephemeral WebRTC media ports via `webrtc_port_min` and `webrtc_port_max` (defaults: `50000` to `50200`):
 
 ```json
 {
@@ -158,7 +158,7 @@ Pion's `SettingEngine.SetEphemeralUDPPortRange` enforces that every client ICE c
 
 ## 2. The Relay Plane (Embedded STUN/TURN)
 
-Connected includes an embedded STUN and TURN server built directly into the binary using Pion's TURN package:
+Meetrix includes an embedded STUN and TURN server built directly into the binary using Pion's TURN package:
 - Listens on UDP port `3478` (configurable via `turn.port`).
 - Authenticates clients using long-term shared credentials (`turn.users` and `turn.secret`).
 - Seamlessly resolves NAT 1:1 address translation by rewriting external ICE candidates to the configured `public_ip`.
@@ -166,8 +166,8 @@ Connected includes an embedded STUN and TURN server built directly into the bina
 ```mermaid
 flowchart LR
     Peer1["Restricted Client<br/>(Symmetric NAT / Strict Firewall)"]
-    TURN["Connected Embedded TURN<br/>(:3478 UDP)"]
-    SFU["Connected SFU Engine<br/>(:50000-50200 UDP)"]
+    TURN["Meetrix Embedded TURN<br/>(:3478 UDP)"]
+    SFU["Meetrix SFU Engine<br/>(:50000-50200 UDP)"]
 
     Peer1 -->|1. STUN Allocate Request| TURN
     TURN -->|2. Allocate Relay Address| Peer1
@@ -199,7 +199,7 @@ All messages exchanged between the client and server share a standardized JSON e
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Client as Browser Client (@connected/core)
+    actor Client as Browser Client (@meetrix/core)
     participant WS as WebSocket Hub (/ws)
     participant Auth as Auth Provider
     participant SFU as Pion SFU Engine
@@ -229,14 +229,14 @@ sequenceDiagram
         WS-->>Client: Envelope: type="candidate"
     end
 
-    Note over Client,SFU: Media Connected! SRTP Flowing.
+    Note over Client,SFU: Media Meetrix! SRTP Flowing.
 ```
 
 ---
 
 ## 4. Concurrency & Thread Safety Model
 
-Connected utilizes Go's idiomatic concurrency primitives to guarantee leak-free operation:
+Meetrix utilizes Go's idiomatic concurrency primitives to guarantee leak-free operation:
 - **Locking Granularity**: Every `Room`, `Peer`, and `Participant` protects its local maps with a `sync.RWMutex`. High-frequency reads (inspecting track lists, querying roles) acquire read locks (`RLock`), while state changes (adding tracks, muting) acquire write locks (`Lock`).
 - **Clean Goroutine Teardown**: Each `PublishedTrack` and `Peer` maintains dedicated `stopChan` and `closeChan` channels. When a peer disconnects or leaves, a `sync.Once` guard terminates all forwarding goroutines and closes the underlying Pion `PeerConnection`.
 - **Non-blocking Signaling**: WebSocket write queues buffer outbound envelopes to prevent a slow consumer from blocking room-wide broadcasts.

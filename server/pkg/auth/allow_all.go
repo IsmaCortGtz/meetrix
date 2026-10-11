@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 	"github.com/google/uuid"
 )
 

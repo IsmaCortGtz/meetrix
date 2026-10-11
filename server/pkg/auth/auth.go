@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/permissions"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/permissions"
 )
 
 // AuthRequest contains client authentication credentials and room targeting information.

@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - Toast Notifications & Clipboard Helpers
+ * Meetrix WebRTC Demo - Toast Notifications & Clipboard Helpers
  */
 
 /**

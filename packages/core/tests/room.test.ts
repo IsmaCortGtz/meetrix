@@ -1,21 +1,21 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ConnectedRoom } from '../src/room';
+import { MeetrixRoom } from '../src/room';
 import { setupMockBrowserEnvironment, MockWebSocket } from './mocks';
 
-describe('ConnectedRoom Lifecycle & Events', () => {
+describe('MeetrixRoom Lifecycle & Events', () => {
   beforeEach(() => {
     setupMockBrowserEnvironment();
     MockWebSocket.instances = [];
   });
 
   it('initializes in disconnected state', () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     expect(room.state).toBe('disconnected');
     expect(room.remoteParticipants.size).toBe(0);
   });
 
   it('handles complete room join lifecycle', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
 
     let connectedEventPayload: any = null;
     room.on('connected', (payload) => {
@@ -104,7 +104,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('handles remote participant joined and left', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'standup' });
     await new Promise((r) => setTimeout(r, 10));
 
@@ -162,7 +162,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('handles chat messages and reactions', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'standup' });
     await new Promise((r) => setTimeout(r, 10));
 
@@ -188,10 +188,10 @@ describe('ConnectedRoom Lifecycle & Events', () => {
     room.on('reaction', (r) => (receivedReaction = r));
 
     // Send a chat message
-    await room.chat.sendMessage('Hello Connected SFU!');
+    await room.chat.sendMessage('Hello Meetrix SFU!');
     const lastMsg = JSON.parse(mockWs.sentMessages[mockWs.sentMessages.length - 1]);
     expect(lastMsg.type).toBe('chat_message');
-    expect(lastMsg.payload.text).toBe('Hello Connected SFU!');
+    expect(lastMsg.payload.text).toBe('Hello Meetrix SFU!');
 
     // Simulate inbound chat broadcast
     mockWs.simulateServerMessage({
@@ -227,7 +227,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('handles moderation mute and kick events', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'standup' });
     await new Promise((r) => setTimeout(r, 10));
 
@@ -281,7 +281,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('updates session timer on ticks', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'timed-session' });
     await new Promise((r) => setTimeout(r, 10));
 
@@ -314,7 +314,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('leaves room cleanly', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'standup' });
     await new Promise((r) => setTimeout(r, 10));
 
@@ -346,7 +346,7 @@ describe('ConnectedRoom Lifecycle & Events', () => {
   });
 
   it('emits peerMediaChanged when media_state_changed is received', async () => {
-    const room = new ConnectedRoom({ autoReconnect: false });
+    const room = new MeetrixRoom({ autoReconnect: false });
     const joinPromise = room.join({ url: 'ws://localhost:8080/ws', roomId: 'standup' });
     await new Promise((r) => setTimeout(r, 10));
 

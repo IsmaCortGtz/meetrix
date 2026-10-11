@@ -10,17 +10,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IsmaCortGtz/connected/server/pkg/auth"
-	"github.com/IsmaCortGtz/connected/server/pkg/config"
-	"github.com/IsmaCortGtz/connected/server/pkg/room"
-	"github.com/IsmaCortGtz/connected/server/pkg/sfu"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/auth"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/config"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/room"
+	"github.com/IsmaCortGtz/meetrix/server/pkg/sfu"
 
 	"github.com/gorilla/websocket"
 	"github.com/pion/rtp"
 	"github.com/pion/webrtc/v4"
 )
 
-// e2eClient is a minimal Pion-based stand-in for a browser using @connected/core.
+// e2eClient is a minimal Pion-based stand-in for a browser using @meetrix/core.
 type e2eClient struct {
 	t       *testing.T
 	ws      *websocket.Conn

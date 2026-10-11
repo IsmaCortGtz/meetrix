@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Moderation Controller
+ * Meetrix WebRTC Core SDK - Moderation Controller
  * Implements Google Meet-style administrative actions: admit, mute, kick, stop media,
  * and update room policies with client-side capability checking.
  */

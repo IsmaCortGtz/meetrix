@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Demo - DOM Elements Reference
+ * Meetrix WebRTC Demo - DOM Elements Reference
  * Centralized, typed references to document elements.
  */
 

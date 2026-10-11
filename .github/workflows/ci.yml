@@ -71,4 +71,4 @@ jobs:
       - name: Build VitePress Documentation
         run: npm run docs:build
         env:
-          VITEPRESS_BASE: '/connected/'
+          VITEPRESS_BASE: '/meetrix/'

@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - WebRTC Manager
+ * Meetrix WebRTC Core SDK - WebRTC Manager
  * Manages RTCPeerConnection lifecycle, SDP offer/answer negotiation,
  * trickle ICE candidates, track publication, and ingress track reception.
  */

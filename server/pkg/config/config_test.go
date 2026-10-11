@@ -82,14 +82,14 @@ func TestLoadConfigFile(t *testing.T) {
 }
 
 func TestLoadConfigEnvOverrides(t *testing.T) {
-	t.Setenv("CONNECTED_HTTP_PORT", "9999")
-	t.Setenv("CONNECTED_PUBLIC_IP", "10.0.0.1")
-	t.Setenv("CONNECTED_WEBRTC_PORT_MIN", "60000")
-	t.Setenv("CONNECTED_WEBRTC_PORT_MAX", "60100")
-	t.Setenv("CONNECTED_TURN_ENABLED", "false")
-	t.Setenv("CONNECTED_TURN_PORT", "4000")
-	t.Setenv("CONNECTED_AUTH_PROVIDER", "webhook")
-	t.Setenv("CONNECTED_ROOM_MAX_PARTICIPANTS", "25")
+	t.Setenv("MEETRIX_HTTP_PORT", "9999")
+	t.Setenv("MEETRIX_PUBLIC_IP", "10.0.0.1")
+	t.Setenv("MEETRIX_WEBRTC_PORT_MIN", "60000")
+	t.Setenv("MEETRIX_WEBRTC_PORT_MAX", "60100")
+	t.Setenv("MEETRIX_TURN_ENABLED", "false")
+	t.Setenv("MEETRIX_TURN_PORT", "4000")
+	t.Setenv("MEETRIX_AUTH_PROVIDER", "webhook")
+	t.Setenv("MEETRIX_ROOM_MAX_PARTICIPANTS", "25")
 
 	cfg, err := LoadConfig("")
 	if err != nil {

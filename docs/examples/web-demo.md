@@ -1,6 +1,6 @@
 # Web Demo Application
 
-The **Web Demo** is a reference frontend application showcasing the full capabilities of `@connected/core` in a production-style user interface inspired by modern video conferencing platforms.
+The **Web Demo** is a reference frontend application showcasing the full capabilities of `@meetrix/core` in a production-style user interface inspired by modern video conferencing platforms.
 
 ---
 
@@ -23,7 +23,7 @@ The **Web Demo** is a reference frontend application showcasing the full capabil
 
 ### 1. Start the Go Media Server
 
-In a terminal window, start the Connected Go media server:
+In a terminal window, start the Meetrix Go media server:
 
 ```bash
 cd server
@@ -51,9 +51,9 @@ The demo application illustrates clean separation of concerns without hard UI fr
 ```text
 examples/demo-web/
 ├── index.html          # Clean semantic UI markup
-├── package.json        # Dependencies (@connected/core, vite, typescript)
+├── package.json        # Dependencies (@meetrix/core, vite, typescript)
 └── src/
-    ├── app.ts          # Main UI controller & ConnectedRoom initialization
+    ├── app.ts          # Main UI controller & MeetrixRoom initialization
     ├── grid.ts         # Video element grid layout & aspect ratio management
     ├── chat.ts         # Chat drawer & real-time message history
     ├── reactions.ts    # Floating CSS emoji burst animations

@@ -6,10 +6,10 @@
     "public_ip": "auto",
     "turn": {
       "enabled": true,
-      "realm": "connected",
+      "realm": "meetrix",
       "port": 3478,
       "users": {
-        "connected": "connected-secret"
+        "meetrix": "meetrix-secret"
       },
       "secret": "turn-shared-secret"
     }
@@ -40,7 +40,7 @@
       "timeout_ms": 5000
     },
     "jwt": {
-      "secret": "connected-jwt-secret",
+      "secret": "meetrix-jwt-secret",
       "algorithm": "HS256",
       "public_key": ""
     }

@@ -1,5 +1,5 @@
 /**
- * Connected WebRTC Core SDK - Test Helpers & Mocks
+ * Meetrix WebRTC Core SDK - Test Helpers & Mocks
  */
 
 export class MockWebSocket {
