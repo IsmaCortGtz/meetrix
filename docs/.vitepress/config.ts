@@ -7,7 +7,7 @@ export default defineConfig({
   base: process.env.VITEPRESS_BASE || '/meetrix/',
 
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', href: '/icon.svg' }],
     ['meta', { name: 'theme-color', content: '#3b82f6' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'Meetrix - WebRTC Framework & SFU' }],
