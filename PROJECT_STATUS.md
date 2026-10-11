@@ -44,6 +44,7 @@
 
 ### Phase 3: Reference Examples
 - [x] Create `examples/demo-web` (Interactive WebRTC UI)
+- [x] Modularize `examples/demo-web` architecture (clean component-based TS & scoped CSS modules)
 - [x] Create `examples/auth-webhook-node` (Auth webhook server)
 - [x] Create `examples/custom-go-server` (Embedded Go extension)
 

@@ -1,0 +1,184 @@
+/**
+ * Connected WebRTC Demo - Meeting Frame & Bottom Controls
+ * In-call header with session countdown, bottom control bar, and reactions popover.
+ */
+
+#meeting-screen {
+  flex-direction: column;
+}
+
+/* Meeting Top Header */
+.meeting-header {
+  height: 56px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.room-tag {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.session-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface-elevated);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.session-timer.warning {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.current-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-copy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.header-copy-pill:hover {
+  background: var(--border-subtle);
+}
+
+/* Bottom Control Bar */
+.meeting-footer {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0 24px;
+  z-index: 10;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-surface-elevated);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.control-btn {
+  background: var(--bg-tile);
+  border: 1px solid var(--border-subtle);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: var(--border-subtle);
+  transform: scale(1.05);
+}
+
+.control-btn.muted {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.control-btn.active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
+.control-separator {
+  width: 1px;
+  height: 28px;
+  background: var(--border-subtle);
+  margin: 0 4px;
+}
+
+/* Reactions Popover Menu */
+.reaction-popover-wrapper {
+  position: relative;
+}
+
+.reaction-menu {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.reaction-menu.hidden {
+  display: none;
+}
+
+.emoji-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.emoji-btn:hover {
+  transform: scale(1.3);
+}
+
