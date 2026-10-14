@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # All-in-one service: Go Media Server + Nginx + Demo Web UI
+  # Automatically runs in HTTP mode (port 80) or HTTPS mode (port 443) if certificates are mounted.
+  meetrix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: meetrix:latest
+    container_name: meetrix
+    restart: unless-stopped
+    ports:
+      - "80:80/tcp"                    # Web UI & WS proxy (HTTP mode, redirects in HTTPS mode)
+      - "443:443/tcp"                  # Web UI & WSS proxy (HTTPS mode)
+      - "8080:8080/tcp"                # Direct Go Media Server signaling listener
+      - "3478:3478/udp"                # Embedded STUN/TURN server
+      - "50000-50200:50000-50200/udp"  # WebRTC SFU RTP media ports
+    environment:
+      - MEETRIX_HTTP_PORT=8080
+      - MEETRIX_TLS_ENABLED=auto       # Options: auto, true, false
+      - MEETRIX_PUBLIC_IP=auto
+      - MEETRIX_TURN_ENABLED=true
+      - MEETRIX_TURN_PORT=3478
+      - MEETRIX_TURN_SECRET=meetrix-turn-secret
+      - MEETRIX_WEBRTC_PORT_MIN=50000
+      - MEETRIX_WEBRTC_PORT_MAX=50200
+      - MEETRIX_AUTH_PROVIDER=allow_all
+    volumes:
+      # Mount directory containing cert.pem and key.pem (or fullchain.pem/privkey.pem).
+      # If omitted or empty, Meetrix automatically runs in HTTP mode.
+      - ./certs:/etc/meetrix/certs:ro
+
+  # Standalone service: Go Media Server ONLY (no Nginx, no Demo Web)
+  # Run with: docker compose --profile standalone up -d meetrix-server
+  meetrix-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: meetrix-server:latest
+    container_name: meetrix-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080/tcp"                # HTTP or HTTPS/WSS signaling listener
+      - "3478:3478/udp"                # Embedded STUN/TURN server
+      - "50000-50200:50000-50200/udp"  # WebRTC SFU RTP media ports
+    environment:
+      - MEETRIX_HTTP_PORT=8080
+      - MEETRIX_TLS_ENABLED=auto       # Options: auto, true, false
+      - MEETRIX_PUBLIC_IP=auto
+      - MEETRIX_TURN_ENABLED=true
+      - MEETRIX_TURN_PORT=3478
+      - MEETRIX_TURN_SECRET=meetrix-turn-secret
+      - MEETRIX_WEBRTC_PORT_MIN=50000
+      - MEETRIX_WEBRTC_PORT_MAX=50200
+      - MEETRIX_AUTH_PROVIDER=allow_all
+    volumes:
+      # Optional: Mount your SSL/TLS certificates
+      - ./certs:/etc/meetrix/certs:ro
+    profiles:
+      - standalone
+

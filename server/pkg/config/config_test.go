@@ -119,6 +119,48 @@ func TestLoadConfigEnvOverrides(t *testing.T) {
 	}
 }
 
+func TestLoadConfigTLSEnvOverrides(t *testing.T) {
+	t.Setenv("MEETRIX_TLS_ENABLED", "true")
+	t.Setenv("MEETRIX_TLS_CERT", "/etc/meetrix/certs/cert.pem")
+	t.Setenv("MEETRIX_TLS_KEY", "/etc/meetrix/certs/key.pem")
+
+	cfg, err := LoadConfig("")
+	if err != nil {
+		t.Fatalf("LoadConfig returned error: %v", err)
+	}
+
+	if !cfg.Server.TLS.Enabled {
+		t.Errorf("expected TLS enabled")
+	}
+	if cfg.Server.TLS.CertFile != "/etc/meetrix/certs/cert.pem" {
+		t.Errorf("expected cert path /etc/meetrix/certs/cert.pem, got %s", cfg.Server.TLS.CertFile)
+	}
+	if cfg.Server.TLS.KeyFile != "/etc/meetrix/certs/key.pem" {
+		t.Errorf("expected key path /etc/meetrix/certs/key.pem, got %s", cfg.Server.TLS.KeyFile)
+	}
+}
+
+func TestLoadConfigTLSDisabledEnvOverrides(t *testing.T) {
+	t.Setenv("MEETRIX_TLS_ENABLED", "false")
+	t.Setenv("MEETRIX_TLS_CERT", "/etc/meetrix/certs/cert.pem")
+	t.Setenv("MEETRIX_TLS_KEY", "/etc/meetrix/certs/key.pem")
+
+	cfg, err := LoadConfig("")
+	if err != nil {
+		t.Fatalf("LoadConfig returned error: %v", err)
+	}
+
+	if cfg.Server.TLS.Enabled {
+		t.Errorf("expected TLS to be disabled when MEETRIX_TLS_ENABLED=false")
+	}
+	if cfg.Server.TLS.CertFile != "/etc/meetrix/certs/cert.pem" {
+		t.Errorf("expected cert path /etc/meetrix/certs/cert.pem, got %s", cfg.Server.TLS.CertFile)
+	}
+	if cfg.Server.TLS.KeyFile != "/etc/meetrix/certs/key.pem" {
+		t.Errorf("expected key path /etc/meetrix/certs/key.pem, got %s", cfg.Server.TLS.KeyFile)
+	}
+}
+
 func TestLoadConfigMissingFile(t *testing.T) {
 	cfg, err := LoadConfig("non_existent_file.json")
 	if err != nil {

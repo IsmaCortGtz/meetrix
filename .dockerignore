@@ -1,0 +1,14 @@
+node_modules
+*/node_modules
+*/*/node_modules
+.git
+.github
+dist
+*/dist
+*/*/dist
+.vitepress/cache
+.vitepress/dist
+server/bin
+*.log
+.DS_Store
+

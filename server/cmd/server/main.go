@@ -23,6 +23,9 @@ import (
 func main() {
 	configPath := flag.String("config", "config.json", "Path to JSON configuration file")
 	portFlag := flag.Int("port", 0, "HTTP port (overrides config)")
+	tlsFlag := flag.String("tls", "", "Enable or disable TLS ('true' or 'false', overrides config and env)")
+	tlsCertFlag := flag.String("tls-cert", "", "Path to TLS certificate file")
+	tlsKeyFlag := flag.String("tls-key", "", "Path to TLS private key file")
 	flag.Parse()
 
 	cfg, err := config.LoadConfig(*configPath)
@@ -33,8 +36,23 @@ func main() {
 	if *portFlag > 0 {
 		cfg.Server.HTTPPort = *portFlag
 	}
+	if *tlsCertFlag != "" {
+		cfg.Server.TLS.CertFile = *tlsCertFlag
+	}
+	if *tlsKeyFlag != "" {
+		cfg.Server.TLS.KeyFile = *tlsKeyFlag
+	}
+	if *tlsFlag != "" {
+		cfg.Server.TLS.Enabled = *tlsFlag == "true" || *tlsFlag == "1"
+	} else if *tlsCertFlag != "" && *tlsKeyFlag != "" && os.Getenv("MEETRIX_TLS_ENABLED") == "" {
+		cfg.Server.TLS.Enabled = true
+	}
 
-	log.Printf("[Meetrix] Initializing Go Media Server on HTTP port %d", cfg.Server.HTTPPort)
+	protoName := "HTTP"
+	if cfg.Server.TLS.Enabled && cfg.Server.TLS.CertFile != "" && cfg.Server.TLS.KeyFile != "" {
+		protoName = "HTTPS/TLS"
+	}
+	log.Printf("[Meetrix] Initializing Go Media Server on %s port %d", protoName, cfg.Server.HTTPPort)
 
 	// Embedded STUN/TURN server
 	var turnServer *turn.Server
@@ -97,11 +115,18 @@ func main() {
 		Handler: mux,
 	}
 
-	// Start HTTP server in background goroutine
+	// Start HTTP / HTTPS server in background goroutine
 	go func() {
-		log.Printf("[Meetrix] Media server ready and listening on %s", serverAddr)
-		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("HTTP server error: %v", err)
+		if cfg.Server.TLS.Enabled && cfg.Server.TLS.CertFile != "" && cfg.Server.TLS.KeyFile != "" {
+			log.Printf("[Meetrix] Media server ready and listening on %s (HTTPS/TLS)", serverAddr)
+			if err := httpServer.ListenAndServeTLS(cfg.Server.TLS.CertFile, cfg.Server.TLS.KeyFile); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("HTTPS server error: %v", err)
+			}
+		} else {
+			log.Printf("[Meetrix] Media server ready and listening on %s (HTTP)", serverAddr)
+			if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("HTTP server error: %v", err)
+			}
 		}
 	}()
 

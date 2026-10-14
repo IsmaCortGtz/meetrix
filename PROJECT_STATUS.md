@@ -95,13 +95,25 @@
 - [x] Standardized Go module path and repository links to `github.com/IsmaCortGtz/meetrix` across all Go packages, `go.mod`, package.json files, examples, and VitePress documentation
 - [x] Added SVG brand logo to `docs/public/logo.svg` and hero headers
 - [x] Created root `README.md` and MIT `LICENSE` with architecture diagrams, quickstart guides, Go library embedding instructions, and NPM distribution guidelines
-- [x] Comprehensive QA verification passed with 100% green tests across Go server, TS SDK, and VitePress docs
+- [x] Implemented Dual Docker container architecture with flexible TLS (with or without HTTPS):
+  - **All-in-One Container (`Dockerfile`)**: Go Media Server, embedded STUN/TURN, and Demo Web application served via Nginx.
+  - **Standalone Server Container (`Dockerfile.server` & `server/Dockerfile`)**: Headless Go Media Server (Pion SFU, TURN, and WebSocket signaling) for custom frontends and microservices.
+  - **Flexible TLS Operation (`MEETRIX_TLS_ENABLED=auto|true|false`)**:
+    - `auto` (default): Automatically activates HTTPS/WSS when certificates are found in `/etc/meetrix/certs`, or runs cleanly in HTTP/WS mode when absent without errors.
+    - `true`: Enforces HTTPS on both Go server and Nginx with automatic self-signed certificate generation if certificates are not mounted.
+    - `false`: Explicitly runs in plain HTTP mode, ideal for deployments behind upstream ingress proxies (Cloudflare, Traefik, AWS ALB, Caddy).
+  - Dual Nginx configurations (`docker/nginx-ssl.conf` and `docker/nginx-plain.conf`) dynamically selected by `docker/entrypoint.sh`.
+  - Dedicated standalone entrypoint (`docker/entrypoint-server.sh`).
+  - Added root `docker-compose.yml` configured for both `meetrix` and `meetrix-server` profiles.
+  - Configured multi-image GitHub Container Registry publishing matrix (`.github/workflows/docker-publish.yml`).
+  - Updated VitePress deployment guide (`docs/guide/deployment.md`).
 
 ---
 
 ## Active Working Context
-- **Current Objective**: All 5 phases completed, tested, and verified. Web demo upgraded to Google Meet-grade user experience with pre-join green room and shareable link routing. Zero race conditions, 100% test coverage.
+- **Current Objective**: Dual Docker container images (All-in-One and Standalone Server) with automatic/configurable TLS (with or without HTTPS) fully implemented, documented, and tested.
 - **Blockers / Risks**: None.
+
 
 
 

@@ -1,0 +1,76 @@
+# ==============================================================================
+# Meetrix WebRTC Media Server Standalone Container Image (Alpine Linux)
+# Features:
+#   - Go Media Server & Pion WebRTC SFU (HTTP or HTTPS/WSS)
+#   - Embedded STUN/TURN Server (UDP 3478)
+#   - Automatic or configurable TLS encryption (HTTP / HTTPS)
+#   - Shared volume mount point for SSL/TLS certificates (/etc/meetrix/certs)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build Go Media Server binary
+# ------------------------------------------------------------------------------
+FROM golang:alpine AS go-builder
+
+WORKDIR /build
+
+RUN apk add --no-cache git ca-certificates tzdata
+
+COPY server/go.mod server/go.sum ./
+RUN go mod download
+
+COPY server/ .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-w -s" \
+    -o meetrix-server \
+    ./cmd/server
+
+# ------------------------------------------------------------------------------
+# Stage 2: Alpine Linux Runtime for Meetrix SFU & TURN Server
+# ------------------------------------------------------------------------------
+FROM alpine:3.20 AS runtime
+
+LABEL org.opencontainers.image.title="Meetrix WebRTC Media Server" \
+      org.opencontainers.image.description="Standalone WebRTC SFU, embedded STUN/TURN, and WebSocket signaling server" \
+      org.opencontainers.image.source="https://github.com/IsmaCortGtz/meetrix" \
+      org.opencontainers.image.licenses="MIT"
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    ca-certificates \
+    openssl \
+    tzdata \
+    bash \
+    curl
+
+# Create application and certificate directories
+RUN mkdir -p /app /etc/meetrix/certs
+
+# Copy Go server binary and configuration
+COPY --from=go-builder /build/meetrix-server /app/meetrix-server
+COPY server/config.json /app/config.json
+
+# Copy entrypoint script
+COPY docker/entrypoint-server.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Certificate mount point volume
+VOLUME ["/etc/meetrix/certs"]
+
+# Non-sensitive default configurations (MEETRIX_TLS_ENABLED: auto | true | false)
+ENV MEETRIX_HTTP_PORT=8080 \
+    MEETRIX_TLS_ENABLED=auto \
+    MEETRIX_PUBLIC_IP=auto \
+    MEETRIX_TURN_ENABLED=true \
+    MEETRIX_TURN_PORT=3478 \
+    MEETRIX_WEBRTC_PORT_MIN=50000 \
+    MEETRIX_WEBRTC_PORT_MAX=50200
+
+# Network Ports:
+# 8080/tcp:        Meetrix Media Server (Direct HTTP or HTTPS/WSS listener)
+# 3478/udp:        Embedded STUN/TURN Server
+# 50000-50200/udp: WebRTC SFU Ephemeral Media Ports
+EXPOSE 8080/tcp 3478/udp 50000-50200/udp
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+

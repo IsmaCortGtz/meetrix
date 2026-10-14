@@ -22,7 +22,18 @@ function initServerUrl(): void {
   if (serverUrlInput) {
     const host = window.location.hostname || 'localhost';
     const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    serverUrlInput.value = `${proto}//${host}:8080/ws`;
+    const port = window.location.port;
+
+    // In production (Nginx reverse proxy on standard HTTP/HTTPS or mapped ports)
+    if (!port || port === '443' || port === '80') {
+      serverUrlInput.value = `${proto}//${window.location.host}/ws`;
+    } else if (port === '5173' || port === '3000') {
+      // Local development server (Vite)
+      serverUrlInput.value = `${proto}//${host}:8080/ws`;
+    } else {
+      // Other custom ports: proxy through current origin /ws
+      serverUrlInput.value = `${proto}//${window.location.host}/ws`;
+    }
   }
 }
 

@@ -68,101 +68,262 @@ export MEETRIX_PUBLIC_IP="203.0.113.10"
 
 ---
 
-## Production Dockerfile
+## Docker Container Images
 
-Use a multi-stage Dockerfile to build a minimal, hardened container image.
+Meetrix provides two production-ready container images based on **Alpine Linux**:
 
-Create `server/Dockerfile`:
+1. **All-in-One Container (`Dockerfile`)**: Bundles the Go Media Server, embedded STUN/TURN server, Nginx reverse proxy, and the interactive Google Meet-style Demo Web application.
+2. **Standalone Media Server Container (`Dockerfile.server`)**: A lean, headless container containing strictly the Go Media Server (Pion WebRTC SFU, TURN, and WebSocket signaling), ideal for custom frontend architectures and microservice topologies.
 
-```dockerfile
-# Stage 1: Build binary
-FROM golang:1.24-alpine AS builder
+---
 
-WORKDIR /build
+### Flexible TLS Modes: With or Without HTTPS
 
-# Install git and build dependencies
-RUN apk add --no-cache git ca-certificates tzdata
+Both Docker images support running with or without HTTPS (TLS certificates) via the `MEETRIX_TLS_ENABLED` environment variable:
 
-COPY go.mod go.sum ./
-RUN go mod download
+| Mode | `MEETRIX_TLS_ENABLED` | Behavior | Ideal For |
+| :--- | :---: | :--- | :--- |
+| **Automatic** *(Default)* | `auto` | Detects certificates in `/etc/meetrix/certs`. If valid certificates exist (`cert.pem`, `fullchain.pem`, or `tls.crt`), enables HTTPS. If no certificates are mounted, runs in plain HTTP mode. | Zero-config local development, testing, and production |
+| **Strict HTTPS** | `true` | Enforces HTTPS on both Go server and Nginx. If no mounted certificate is found, automatically generates a self-signed fallback certificate so the container never fails to boot. | Staging, standalone HTTPS servers, and direct browser access |
+| **Plain HTTP** | `false` | Explicitly disables TLS. The Go server listens on HTTP and Nginx serves the web app on port 80. | Deployments behind external reverse proxies (Cloudflare, Traefik, AWS ALB, Caddy, Kubernetes Ingress) |
 
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-    -ldflags="-w -s" \
-    -o meetrix-server \
-    ./cmd/server
+> [!NOTE]
+> Modern web browsers restrict `navigator.mediaDevices.getUserMedia` (camera and microphone access) to **secure contexts** (`https://` or `http://localhost`). When testing over plain HTTP on remote networks or external domains, ensure you terminate SSL at an upstream ingress proxy or enable TLS mode.
 
-# Stage 2: Hardened runtime
-FROM alpine:3.20
+### Dual HTTPS Architecture & Certificate Mount Point
 
-WORKDIR /app
+When TLS is active, both **Nginx** and the **Go Media Server** share a single standardized certificate volume mount point:
 
-RUN apk --no-cache add ca-certificates tzdata
+- **Mount Directory**: `/etc/meetrix/certs`
+- **Certificate File**: `/etc/meetrix/certs/cert.pem` (or `fullchain.pem`, `tls.crt`)
+- **Private Key File**: `/etc/meetrix/certs/key.pem` (or `privkey.pem`, `tls.key`)
 
-# Create unprivileged user
-RUN adduser -D -u 10001 meetrixuser
+```mermaid
+flowchart TD
+    subgraph Host["Host System / Cloud VM"]
+        CertMount["SSL/TLS Directory<br/>/path/to/certs<br/>• cert.pem<br/>• key.pem"]
+    end
 
-COPY --from=builder /build/meetrix-server /app/meetrix-server
-COPY config.json /app/config.json
+    subgraph Container["Alpine All-in-One Container"]
+        MountVol["Mounted Volume: /etc/meetrix/certs"]
+        Nginx["Nginx (Ports 80 & 443)<br/>• Serves Demo Web UI<br/>• WS/WSS Proxy for /ws<br/>• SSL via /etc/meetrix/certs"]
+        GoServer["Go Media Server (Port 8080)<br/>• HTTP or Native TLS / WSS<br/>• TURN UDP 3478<br/>• SFU UDP 50000-50200"]
+    end
 
-USER meetrixuser
-
-EXPOSE 8080/tcp 3478/udp 50000-50200/udp
-
-ENTRYPOINT ["/app/meetrix-server", "-config", "/app/config.json"]
+    CertMount -.->|"Optional Volume Mount (:ro)"| MountVol
+    MountVol --> Nginx
+    MountVol --> GoServer
+    Nginx -->|"Proxy pass /ws"| GoServer
 ```
 
 ---
 
-## Docker Compose Deployment
+## 1. All-in-One Image (`Dockerfile`)
 
-Because WebRTC requires high-throughput UDP packet delivery without Docker NAT translation overhead, **using `network_mode: host` on Linux is strongly recommended**.
+The root `Dockerfile` builds the Go media server, compiles the TypeScript SDK and demo web application, and packages them with Nginx:
 
-### `docker-compose.yml` (Host Network Mode - Recommended)
+```bash
+# Build the All-in-One image
+docker build -t meetrix:latest .
+
+# Run in HTTP mode (zero config)
+docker run -d --name meetrix -p 80:80 -p 8080:8080 -p 3478:3478/udp -p 50000-50200:50000-50200/udp meetrix:latest
+
+# Run in HTTPS mode with mounted SSL certificates
+docker run -d --name meetrix \
+  -v /opt/meetrix/certs:/etc/meetrix/certs:ro \
+  -p 80:80 -p 443:443 -p 8080:8080 -p 3478:3478/udp -p 50000-50200:50000-50200/udp \
+  meetrix:latest
+```
+
+---
+
+## 2. Standalone Media Server Image (`Dockerfile.server`)
+
+For production setups where your frontend is hosted separately (e.g. Next.js, Vue, mobile apps) or behind an external API gateway, use `Dockerfile.server`:
+
+```bash
+# Build from repository root
+docker build -f Dockerfile.server -t meetrix-server:latest .
+
+# Or build from server/ directory
+cd server && docker build -t meetrix-server:latest .
+
+# Run in HTTP mode
+docker run -d --name meetrix-server \
+  -p 8080:8080/tcp -p 3478:3478/udp -p 50000-50200:50000-50200/udp \
+  meetrix-server:latest
+
+# Run in HTTPS mode with mounted SSL certificates
+docker run -d --name meetrix-server \
+  -v /opt/meetrix/certs:/etc/meetrix/certs:ro \
+  -p 8080:8080/tcp -p 3478:3478/udp -p 50000-50200:50000-50200/udp \
+  meetrix-server:latest
+```
+
+---
+
+## Publishing to GitHub Container Registry (GHCR)
+
+You can push your image to **GitHub Packages (GHCR)** so it can be deployed via Portainer or any Docker environment.
+
+### 1. Authenticate with GitHub Container Registry
+
+Generate a **Personal Access Token (classic)** with `write:packages`, `read:packages`, and `delete:packages` scopes at [GitHub Settings > Developer settings > Tokens](https://github.com/settings/tokens).
+
+Log in locally:
+
+```bash
+export CR_PAT="YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
+echo $CR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+```
+
+### 2. Build, Tag, and Push
+
+```bash
+# Build the Alpine image
+docker build -t ghcr.io/YOUR_GITHUB_USERNAME/meetrix:latest .
+
+# Push image to GitHub Container Registry
+docker push ghcr.io/YOUR_GITHUB_USERNAME/meetrix:latest
+```
+
+### 3. Automated GitHub Actions Workflow
+
+This repository includes `.github/workflows/docker-publish.yml` which automatically builds multi-architecture images (`linux/amd64`, `linux/arm64`) and pushes to GHCR whenever changes are pushed to `main` or release tags:
+
+```yaml
+name: Build and Publish Docker Images
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: all-in-one
+            image_suffix: ""
+            dockerfile: ./Dockerfile
+          - target: server
+            image_suffix: "-server"
+            dockerfile: ./Dockerfile.server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.image_suffix }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=semver,pattern={{version}}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+```
+
+### 4. Public vs Private Package Visibility
+
+By default, newly published packages on GHCR are **private**. To allow Portainer to pull the image without authentication:
+1. Go to your GitHub profile or organization -> **Packages**.
+2. Click on **`meetrix`**.
+3. Under **Package settings**, scroll down to **Danger Zone** -> **Change package visibility** and set it to **Public**.
+
+> [!NOTE]
+> If you prefer keeping the image private, add GitHub Container Registry credentials in Portainer: **Registries** > **Add registry** > select **Custom registry** > Name: `ghcr.io`, URL: `ghcr.io`, Username: your GitHub username, Password: Personal Access Token.
+
+---
+
+## Portainer & Docker Compose Deployment
+
+In **Portainer**:
+1. Open your Portainer dashboard and select your environment.
+2. In the left menu, click **Stacks** -> **Add stack**.
+3. Name the stack: `meetrix`.
+4. In the **Web editor**, paste one of the Docker Compose configurations below.
+5. Click **Deploy the stack**.
+
+### `docker-compose.yml` (Host Network Mode - Recommended for Linux)
+
+Host network mode eliminates Docker NAT overhead for UDP media packets and gives the best WebRTC performance:
 
 ```yaml
 version: '3.8'
 
 services:
   meetrix:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: ghcr.io/YOUR_GITHUB_USERNAME/meetrix:latest
+    container_name: meetrix
     network_mode: "host"
     restart: unless-stopped
     environment:
       - MEETRIX_HTTP_PORT=8080
-      - MEETRIX_PUBLIC_IP=203.0.113.10
+      - MEETRIX_PUBLIC_IP=203.0.113.10  # Replace with your public IP or domain
       - MEETRIX_WEBRTC_PORT_MIN=50000
       - MEETRIX_WEBRTC_PORT_MAX=50200
       - MEETRIX_TURN_ENABLED=true
       - MEETRIX_TURN_PORT=3478
-      - MEETRIX_TURN_SECRET=change-this-in-production-turn-secret
-      - MEETRIX_AUTH_PROVIDER=jwt
-      - MEETRIX_AUTH_JWT_SECRET=change-this-production-jwt-secret-min-32-bytes
+      - MEETRIX_TURN_SECRET=your-secret-turn-token
+      - MEETRIX_AUTH_PROVIDER=allow_all  # Options: allow_all, jwt, webhook, exec
     volumes:
-      - ./server/config.json:/app/config.json:ro
+      # Mount directory containing cert.pem and key.pem (or fullchain.pem/privkey.pem)
+      - /opt/meetrix/certs:/etc/meetrix/certs:ro
 ```
 
-### `docker-compose.yml` (Bridge Mode Alternative)
+### `docker-compose.yml` (Bridge Mode Alternative with Port Mapping)
 
-If host networking cannot be used (e.g., Docker for Mac/Windows during development):
+If your host environment does not allow `network_mode: "host"` (such as macOS/Windows or restricted container environments):
 
 ```yaml
 version: '3.8'
 
 services:
   meetrix:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080/tcp"
-      - "3478:3478/udp"
-      - "50000-50200:50000-50200/udp"
+    image: ghcr.io/YOUR_GITHUB_USERNAME/meetrix:latest
+    container_name: meetrix
     restart: unless-stopped
+    ports:
+      - "80:80/tcp"                 # HTTP (redirects to HTTPS)
+      - "443:443/tcp"               # HTTPS (Nginx Demo Web & WebSocket Proxy)
+      - "8080:8080/tcp"             # Meetrix Go Media Server Direct HTTPS/WSS
+      - "3478:3478/udp"             # Embedded STUN/TURN Server
+      - "50000-50200:50000-50200/udp" # WebRTC SFU Media RTP Ports
     environment:
-      - MEETRIX_PUBLIC_IP=127.0.0.1
+      - MEETRIX_PUBLIC_IP=203.0.113.10  # Replace with your public IP or domain
+      - MEETRIX_WEBRTC_PORT_MIN=50000
+      - MEETRIX_WEBRTC_PORT_MAX=50200
+      - MEETRIX_TURN_ENABLED=true
+      - MEETRIX_TURN_PORT=3478
+      - MEETRIX_TURN_SECRET=your-secret-turn-token
+      - MEETRIX_AUTH_PROVIDER=allow_all
+    volumes:
+      # Mount directory containing cert.pem and key.pem
+      - /opt/meetrix/certs:/etc/meetrix/certs:ro
 ```
 
 ---

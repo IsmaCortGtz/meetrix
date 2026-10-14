@@ -9,11 +9,19 @@ import (
 
 // ServerConfig defines network and media server listener configuration.
 type ServerConfig struct {
-	HTTPPort       int        `json:"http_port"`
-	WebRTCPortMin  uint16     `json:"webrtc_port_min"`
-	WebRTCPortMax  uint16     `json:"webrtc_port_max"`
-	PublicIP       string     `json:"public_ip"`
-	TURN           TURNConfig `json:"turn"`
+	HTTPPort      int        `json:"http_port"`
+	WebRTCPortMin uint16     `json:"webrtc_port_min"`
+	WebRTCPortMax uint16     `json:"webrtc_port_max"`
+	PublicIP      string     `json:"public_ip"`
+	TURN          TURNConfig `json:"turn"`
+	TLS           TLSConfig  `json:"tls"`
+}
+
+// TLSConfig defines HTTPS/WSS TLS encryption settings.
+type TLSConfig struct {
+	Enabled  bool   `json:"enabled"`
+	CertFile string `json:"cert_file"`
+	KeyFile  string `json:"key_file"`
 }
 
 // TURNConfig defines embedded STUN/TURN server settings.
@@ -95,6 +103,11 @@ func DefaultConfig() *Config {
 					"meetrix": "meetrix-secret",
 				},
 				Secret: "turn-shared-secret",
+			},
+			TLS: TLSConfig{
+				Enabled:  false,
+				CertFile: "",
+				KeyFile:  "",
 			},
 		},
 		Room: RoomConfig{
@@ -214,5 +227,16 @@ func applyEnvOverrides(cfg *Config) {
 	}
 	if val := os.Getenv("MEETRIX_AUTH_EXEC_COMMAND"); val != "" {
 		cfg.Auth.Exec.Command = val
+	}
+	if val := os.Getenv("MEETRIX_TLS_CERT"); val != "" {
+		cfg.Server.TLS.CertFile = val
+	}
+	if val := os.Getenv("MEETRIX_TLS_KEY"); val != "" {
+		cfg.Server.TLS.KeyFile = val
+	}
+	if val := os.Getenv("MEETRIX_TLS_ENABLED"); val != "" {
+		cfg.Server.TLS.Enabled = val == "true" || val == "1"
+	} else if cfg.Server.TLS.CertFile != "" && cfg.Server.TLS.KeyFile != "" {
+		cfg.Server.TLS.Enabled = true
 	}
 }
